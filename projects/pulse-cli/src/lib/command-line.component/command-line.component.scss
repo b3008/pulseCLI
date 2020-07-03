@@ -1,0 +1,60 @@
+@import "../_variables.scss";
+
+:host {
+  position: relative;
+  width: 100%;
+}
+textarea {
+  width: 100%;
+}
+
+#divArea {
+  margin: 0px auto;
+  color: $command-line-foreground;
+  min-width: 50px;
+  // border-bottom:solid thin;
+  padding-left: 25px;
+  font-size: 14px;
+  font-weight:bold;
+  user-select: text;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+#divArea::before {
+  //  content:"\01F916";
+  content: " > ";
+  font-size: 14px;
+  margin-left: -22px;
+}
+
+#divArea:focus{
+    border:none;
+}
+[contenteditable]:focus {
+    outline: 0px solid transparent;
+}
+
+pre:focus{
+    border:solid pink;
+}
+.command {
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.glow {
+  -webkit-animation: glow 2s ease-in-out infinite alternate;
+  -moz-animation: glow 2s ease-in-out infinite alternate;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 5px #82bd1d, 0 0 10px #82bd1d;
+  }
+
+  to {
+    text-shadow: 0 0 10px limegreen, 0 0 15px limegreen;
+  }
+}

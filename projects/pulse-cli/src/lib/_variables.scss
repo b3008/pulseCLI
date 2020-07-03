@@ -1,0 +1,61 @@
+// // Import material theming functions
+// // @import '~@angular/material/theming';
+
+// // Copy the palettes from your selected theme (usually theme.scss).
+// $app-primary: mat-palette($mat-gray);
+// $app-secondary:mat-palette($mat-purple);
+// $app-accent:  mat-palette($mat-pink);
+// $app-warn:    mat-palette($mat-deep-orange);
+// $theme: mat-light-theme($app-primary,$app-accent,$app-warn);
+// // Create your Sass color vars (will be available in all the project)
+
+
+// $primary: mat-color($app-primary, 600);
+// $primary-light-variant: mat-color($app-primary, 200);
+// $primary-dark-variant: mat-color($app-primary, 800);
+
+// $secondary: mat-color($app-secondary,500);
+// $secondary-light-variant: mat-color($app-secondary,200);
+// $secondary-dark-variant: mat-color($app-secondary,700);
+
+
+// $accent: mat-color($app-accent);
+// $accent-hover: mat-color($app-warn, 500);
+// $accent-light-variant: mat-color($app-accent,300);
+// $accent-dark-variant: mat-color($app-accent,700);
+
+
+// $warn: mat-color($app-warn);
+
+// $background: mat-color(map-get($theme, background));
+// $foreground: mat-color(map-get($theme, foreground));
+
+
+
+// $output-border: mat-color($app-primary,100);
+// $output-header-background: mat-color($app-primary,100);
+// $output-header-foreground: mat-color($app-accent,700);
+// $output-header-border-bottom:mat-color($app-primary,300);
+
+// $output-content-background: white;
+
+
+// $command-line-background: mat-color($app-primary,100);
+// $command-line-foreground: $output-header-foreground;
+
+
+$command-line-foreground : #000;
+$command-line-background : #ffff;
+
+$foreground: #000;
+$background: #fff;
+
+$app-accent:blue;
+$accent: purple;
+$accent-light-variant:pink;
+
+$primary-dark-variant: darkgray;
+
+$output-header-background: darkgreen;
+$output-header-foreground: yellow;
+$output-header-border-bottom: aqua;

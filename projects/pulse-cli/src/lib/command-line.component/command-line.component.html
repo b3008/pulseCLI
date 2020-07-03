@@ -1,0 +1,23 @@
+<!-- Generated template for the CommandLineComponent component -->
+<div class="backgroundOverlay">
+
+</div>
+
+<div id="speechBubbleContainer" #speechBubbleContainer >
+  <div id="speechBubbleContent" #speechBubbleContent>
+    <!-- Welcome to the command line interface. Type <span class="command">?</span> for a list of available commands. -->
+  </div>
+  <div class="speech-bubble-base"></div>
+</div>
+
+
+
+<pre id="divArea"  #divArea contenteditable  (keypress)="keypress($event)" (keydown)="keydown($event)" tabindex="-1">{{command}}</pre>
+<!-- <div #belowDivArea style="position:relative" (click)="setFocusToCommandLine" (suggestionSelected)="suggestionSelected($event)">
+  <suggestion-box #suggestionBox style="font-family:monospace" style="display:none"></suggestion-box>
+</div> -->
+
+
+
+
+

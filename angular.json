@@ -134,6 +134,41 @@
           }
         }
       }
+    },
+    "pulseCLI": {
+      "root": "projects/pulse-cli",
+      "sourceRoot": "projects/pulse-cli/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/pulse-cli/tsconfig.lib.json",
+            "project": "projects/pulse-cli/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/pulse-cli/src/test.ts",
+            "tsConfig": "projects/pulse-cli/tsconfig.spec.json",
+            "karmaConfig": "projects/pulse-cli/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/pulse-cli/tsconfig.lib.json",
+              "projects/pulse-cli/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "cliLib"

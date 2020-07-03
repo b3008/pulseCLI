@@ -1,0 +1,230 @@
+@import "../_variables.scss";
+
+
+:host {
+  display: block;
+  
+  position: relative;
+  
+  height: 100%;
+  font-family: 'IBM Plex Sans';
+}
+
+#pageContainer{
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+}
+#topBar {
+  flex-grow:1;
+  display: flex;
+  align-items:center;
+  position: relative;
+  padding:10px;
+  border-bottom:dashed thin gray;
+}
+
+//replaces pageContainer
+#pageContainer-across{
+  display:flex;
+  flex-direction:row;
+  height:100vh;
+}
+
+//replaces topBar
+#topBar-vertical{
+  // flex-grow:1;
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+  position: relative;
+  padding:5px;
+  border-right:solid thin gray;
+}
+
+.button-container{
+  margin-left:2px;
+  margin-right:2px;
+}
+
+.button-container button{
+  --transition: color 0.2s;
+}
+.button-container button:hover{
+  color:$accent;
+}
+
+
+.splitButton {
+
+
+  position: relative;
+}
+
+
+
+
+#splitContainer{
+  flex-grow:2;
+  display:flex; 
+  flex-wrap:nowrap; 
+  width:100%; 
+  height:100%;
+  font-family: 'IBM Plex Sans'
+}
+
+.split {
+  display: flex;
+  width: 100%;
+  flex-grow: 2;
+  // overflow:hidden;
+  position:relative;
+  height:100%;
+}
+
+.splitSeparator {
+  box-sizing: border-box;
+  background-color: black;
+  width: 5px;
+  height: 100%;
+  
+  flex-grow: 0;
+  border-left: dashed thin gray;
+  cursor: ew-resize;
+}
+.splitSeparator:hover {
+  box-sizing: border-box;
+  
+  width: 5px;
+  height: 100%;
+  flex-grow: 0;
+  border-left: dashed thin gray;
+  background-color:$accent;
+}
+
+.separatorHeader {
+  position: relative;
+  padding-right: 10px;
+  text-align: right;
+  
+  color:$foreground;
+  background: $background;
+  display: flex;
+  justify-content: space-between;
+  height: 20px;
+  width: 100%;
+  cursor: pointer;
+}
+.separatorHeader ion-icon {
+  color: gray;
+}
+.separatorHeader .panelTitle {
+  
+  padding-bottom:3px;
+  left: 10px;
+  position: relative;
+  color:black;
+  user-select:none;
+}
+
+.separatorHeader.active {
+  background: $primary-dark-variant;
+}
+
+.separatorHeader.active .panelTitle{
+  color:white;
+}
+
+.separatorCloseIcon {
+  transition: color 0.5s;
+}
+
+.separatorCloseIcon:hover {
+  
+  color: pink;
+}
+
+.fixed-content {
+  margin-bottom: 0px;
+}
+
+#divArea {
+  background: none;
+  border: none;
+}
+
+
+.commandOutputComponentsContainer{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  position:relative;overflow:visible;
+}
+
+.outputContainer {
+  position: relative;
+  flex:auto;
+  overflow: visible;
+  border-bottom: solid thin black;
+  // height:calc(100% - 50px);
+  background : $background;
+}
+
+
+// .outputContainer .takeHeightAway{
+//   height:calc(100% - 70px);
+// }
+
+.commandLineContainer {
+  position: relative;
+
+  height:50px;
+  min-height:50px;
+  flex-grow:0;
+  padding: 5px;
+  font-family: 'IBM Plex Mono', monospace;
+
+  z-index: 999;
+  background: $command-line-background;
+
+  border-top: solid thin gray;
+}
+
+.movingProxy {
+  position: absolute;
+  display: none;
+  border: dashed 5px mat-color($app-accent,100);
+  height:100%;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+}
+
+div.mat-select-arrow{
+  color:$accent-light-variant;
+}
+
+.mat-select-label{
+  flex-grow:2;
+  color:$accent-light-variant;
+  text-align:left;
+  padding-left:10px;
+  padding-top:3px;
+  white-space: nowrap;
+  font-size:12px;
+  font-family:'IBM Plex Mono';
+  font-weight:bold;
+  
+ 
+}
+
+
+.mat-select{
+  display:block;
+  margin-left:15px; 
+  width:50px;
+  // border-left:solid thin white;
+  // background-color:rgba(255,255,255,0.2);
+}
+

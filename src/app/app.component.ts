@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
+import { PulseCLIComponent, PulseCLIService} from '../../projects/pulse-cli/src/public-api';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'cliLib';
+
+  @ViewChild('pulse', {read: PulseCLIComponent}) pulse: PulseCLIComponent;
+
+  
 }

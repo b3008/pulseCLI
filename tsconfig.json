@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "pulse-cli": [
+        "dist/pulse-cli"
+      ],
+      "pulse-cli/*": [
+        "dist/pulse-cli/*"
+      ]
+    }
   }
 }

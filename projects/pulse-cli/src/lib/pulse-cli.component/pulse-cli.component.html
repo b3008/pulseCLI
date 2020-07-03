@@ -1,0 +1,125 @@
+
+<div id="pageContainer-across" (mouseover)="mouseover($event)" (keydown)="keydown($event)" (keyup)="keyup($event)" (mouseup)="splitContainerMouseUp($event)"
+  tabindex="0">
+
+  <div id="topBar-vertical">
+
+
+    <div  class="button-container">
+      <button  (click)='commandRegistry.parseCommand("researcherinfo");'>
+        button1
+      </button>
+    </div>
+
+    <div class="button-container">
+      <button  (click)='commandRegistry.parseCommand("help");'>
+        button2
+      </button>
+    </div>
+
+  
+
+    <div style="display:flex; justify-content:center; width:100%">
+
+
+      <div class="button-container">
+        <button (click)='commandRegistry.parseCommand("panel")'>
+          add panel
+        </button>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <div id="splitContainer" #splitContainer (mouseup)="splitContainerMouseUp($event)"
+    (mouseup)="mouseUpWhileCommandOutputMouseDown()" (mousemove)="splitContainerMousemove($event)"
+    (mousemove)="mouseMoveWhileCommandOutputMouseDown($event)"
+    (commandOutputHeaderHasMouseDown)="commandOutputHeaderHasMouseDown($event)">
+
+    <div #movingProxy class="movingProxy"></div>
+
+    <div #splitChild *ngFor="let split of commandOutputComponentLists;let i=index;" class="split"
+      [style.width]="splitWidthArr[i] +  '%'" (click)="selectSplitFromEmptyPanelClick($event, i)">
+
+      <div class="splitContent" style="position:relative; width:100%; height:100%">
+
+        <div *ngIf="commandOutputComponentLists.length>0" class="separatorHeader" [class.active]="activeTab==i"
+          (click)="selectSplit(i)">
+
+          <div *ngIf="commandComponentHistories[i].length==0" class="panelTitle mat-caption">panel {{i+1}}</div>
+
+
+
+
+          <ng-container *ngIf="commandComponentHistories[i].length>0">
+              
+            
+
+            <div style="width:100%;  display:flex; position:relative; justify-items: flex-start; justify-content: left">
+              <div  class="panelTitle mat-caption" style="width:80%; text-align: left">panel {{i+1}}</div>
+            
+              <div style="display:flex; margin-right:30px">
+                <div class="mat-select-label" (click)="openMatSelectForCommandHistories(i)">{{commandComponentHistories[i][commandComponentHistories[i].length-1]}}
+                </div>
+                <div>
+                  <!-- <mat-select #matSelectForCommandHistories style="display:block">
+                    <mat-option *ngFor="let historyEntry of commandComponentHistories[i]; let h=index"
+                      (click)="bringCommandOutputHistoryToFront($event, i, h)">{{historyEntry}}
+                    </mat-option>
+                  </mat-select> -->
+                </div>
+              </div>
+
+
+            </div>
+          </ng-container>
+
+          <div *ngIf="commandOutputComponentLists.length>1">
+            <!-- <ion-icon class="separatorCloseIcon" name="close" (click)="closeSplit($event, i)"></ion-icon> -->
+            <span class="close-button" name="close-circle"><img src="/assets/close-icon.svg"> </span>
+          </div>
+        </div>
+
+        <div class="commandOutputComponentsContainer" (commandStringDispatched)="commandStringReceived($event)"
+          (commandIssued)="commandIssued($event, i)">
+
+
+          <div class="outputContainer" [class.takeHeightAway]="splitSeparatorArr.length>1" #outputContainer
+            (commandOutputComponentInitialized)="scrollToBottom()" (scrollToBottom)="scrollToBottom()"
+            (update)="changeDetector.detectChanges()" (bringCommandOutputToFront)="bringCommandOutputToFront($event,i)"
+            (destroyCommandOutput)="destroyCommandOutputEvent($event, i)">
+            <ng-container id="output" #output></ng-container>
+
+
+          </div>
+
+
+          <div class="commandLineContainer" (commandIssued)="commandIssued($event,i)" data-helpitem="about.md">
+            <command-line #commandLine></command-line>
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div *ngIf="shouldRenderSeparator(i)" [attr.data-index]=i class="splitSeparator"
+        (mousedown)="splitSeparatorMousedown($event ,i)" (mouseup)="splitSeparatorMouseup($event, i)">
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+  </div>
+
+</div>
