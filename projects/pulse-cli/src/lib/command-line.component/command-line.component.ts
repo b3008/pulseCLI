@@ -19,10 +19,10 @@ export class CommandLineComponent implements OnInit {
   type = "main";
 
   @Input('command') public command:string;
-  @ViewChild('divArea', {read:ElementRef}) divArea: ElementRef;
-  @ViewChild('belowDivArea', {read:ElementRef}) belowDivArea: ElementRef;
-  @ViewChild('speechBubbleContent', {read:ElementRef}) speechBubbleContent: ElementRef;
-  @ViewChild('speechBubbleContainer', {read:ElementRef}) speechBubbleContainer: ElementRef;
+  @ViewChild('divArea', { read: ElementRef, static: true }) divArea: ElementRef;
+  @ViewChild('belowDivArea', { read: ElementRef }) belowDivArea: ElementRef;
+  @ViewChild('speechBubbleContent', { read: ElementRef, static: true }) speechBubbleContent: ElementRef;
+  @ViewChild('speechBubbleContainer', { read: ElementRef, static: true }) speechBubbleContainer: ElementRef;
   // @ViewChild('suggestionBox', {read:ElementRef}) suggestionBox: SuggestionBoxComponent;
 
   keys$;

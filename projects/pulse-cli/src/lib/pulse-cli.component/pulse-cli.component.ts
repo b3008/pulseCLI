@@ -37,16 +37,16 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-  @ViewChild('terminal', { read: ElementRef}) terminalContainer: ElementRef;
-  @ViewChild('outputContainer', { read: ElementRef}) outputContainer: ElementRef;
+  @ViewChild('terminal', { read: ElementRef }) terminalContainer: ElementRef;
+  @ViewChild('outputContainer', { read: ElementRef }) outputContainer: ElementRef;
   @ViewChildren('outputContainer', { read: ViewContainerRef }) outputContainerChildren;
   @ViewChild('output', { read: ViewContainerRef }) output: ViewContainerRef;
   @ViewChildren('output', { read: ViewContainerRef }) outputChildren;
   @ViewChildren(CommandLineComponent) commandLine;
 
-  @ViewChild('splitContainer', { read: ElementRef }) splitContainer: ElementRef;
+  @ViewChild('splitContainer', { read: ElementRef, static: true }) splitContainer: ElementRef;
   @ViewChildren('splitChild', { read: ElementRef }) splitChildren;
-  @ViewChild('movingProxy', { read: ViewContainerRef }) movingProxy: ViewContainerRef;
+  @ViewChild('movingProxy', { read: ViewContainerRef, static: true }) movingProxy: ViewContainerRef;
 
   // @ViewChildren("matSelectForCommandHistories", { read: MatSelect }) matSelectForCommandHistories: QueryList<MatSelect>;
 
