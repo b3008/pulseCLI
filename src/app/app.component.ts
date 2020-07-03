@@ -9,7 +9,7 @@ import { PulseCLIComponent, PulseCLIService} from '../../projects/pulse-cli/src/
 export class AppComponent {
   title = 'cliLib';
 
-  @ViewChild('pulse', {read: PulseCLIComponent}) pulse: PulseCLIComponent;
+  @ViewChild('pulse', { read: PulseCLIComponent, static: true }) pulse: PulseCLIComponent;
 
   
 }

@@ -18,9 +18,9 @@ export class CommandOutputComponent implements OnInit {
   ngOnInit() {}
 
   @Output() commandOutputComponentInitialized: EventEmitter<any> = new EventEmitter;
-  @ViewChild('container', {read:ViewContainerRef}) container: ViewContainerRef;
-  @ViewChild("commandline",  {read:ViewContainerRef}) commandLine: ViewContainerRef;
-  @ViewChild("nextContainer", {read:CommandOutputComponent}) nextContainer: CommandOutputComponent;
+  @ViewChild('container', { read: ViewContainerRef, static: true }) container: ViewContainerRef;
+  @ViewChild("commandline", { read: ViewContainerRef }) commandLine: ViewContainerRef;
+  @ViewChild("nextContainer", { read: CommandOutputComponent }) nextContainer: CommandOutputComponent;
 
 
   public isHidden = false;
