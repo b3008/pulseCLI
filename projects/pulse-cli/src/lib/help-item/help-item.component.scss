@@ -1,0 +1,35 @@
+@import '../_variables';
+
+.title {
+  color: $accent;
+  width: 50%;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  transition: color 0.2s;
+  font-weight: bold;
+}
+.title:hover {
+  text-decoration: underline;
+  // color: var(--color-green-high);
+  color:$accent-hover;
+}
+// .text {
+//   // color: var(--color-blue-high);
+// }
+.description {
+  // color: var(--color-orange);
+  color:$primary-dark-variant
+}
+.expand-wrapper {
+  padding: 15px;
+  width: 100%;
+  transition: 0.2s linear;
+  max-height: 600px;
+  overflow: hidden;
+}
+
+.collapsed {
+  transition: 0.2s linear;
+  max-height: 0px;
+  padding: 0px;
+}

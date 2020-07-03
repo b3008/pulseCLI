@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 
 // import { PulseCLIModule } from 'pulse-cli';
 import { PulseCLIModule } from '../../projects/pulse-cli/src/lib/pulse-cli.component/pulse-cli.module';
+import { PipesModule } from '../../projects/pulse-cli/src/lib/pipes.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { PulseCLIModule } from '../../projects/pulse-cli/src/lib/pulse-cli.compo
   imports: [
     BrowserModule,
     AppRoutingModule,
-    PulseCLIModule
+    PulseCLIModule,
+    PipesModule
   ],
   providers: [], 
   bootstrap: [AppComponent]

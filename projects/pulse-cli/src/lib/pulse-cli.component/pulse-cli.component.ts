@@ -213,10 +213,27 @@ export class PulseCLIComponent implements OnInit {
       this.clearActiveCommandLine()
     })
 
+    this.commandRegistry.command("help", "this help text", "help")
+    .action((args, commandString, resolve, reject) => {
+      let cmdContainer = this.insertComponent(null, 'help').cmdContainer;
+
+      for (var i = 0; i < args.helpItems.length; i++) {
+        cmdContainer.container.insert(args.helpItems[i].hostView);
+      }
+      this.clearActiveCommandLine()
+      resolve(this);
+    })
+
+      //   this.commandRegistry.command('what now', "recommendations on how to interact with the system", "UI")
+      // .action((args, commandString, resolve, reject) => {
+      //   let components = this.insertComponent(WhatnowComponent, commandString);
+      //   let whatNowComponent = components.component;
+      //   resolve();
+      //   this.clearActiveCommandLine();
+      // })
+
     this.commandRegistry.command('panel <number>', "make numbered panel active or add new panel to screen", "UI")
       .action((args, commandString, resolve, reject) => {
-
-
         this.clearActiveCommandLine()
         if (!args.number) {
           this.newSplit();
@@ -229,29 +246,114 @@ export class PulseCLIComponent implements OnInit {
         resolve(this);
 
       });
+
+    this.commandRegistry.command('move card <panel1_card1> <panel2>', "move card to different panel", "UI")
+      .action((args, commandString, resolve, reject) => {
+
+        this.clearActiveCommandLine()
+
+        let separator = "_";
+        if (args.panel1_card1.indexOf(',') != -1) { separator = "," }
+
+        let panel1 = args.panel1_card1.split(separator)[0] - 1;
+        let card1 = args.panel1_card1.split(separator)[1] - 1;
+        let panel2 = args.panel2 - 1
+        let elem = this.commandOutputComponentLists[panel1][card1].instance.element.nativeElement;
+        this.moveCommandOutputToSplitByIndex(elem, panel2);
+
+        resolve(this);
+
+      });
+
+    this.commandRegistry.command('destroy card <panel_card>', "remove card", "UI")
+      .action((args, commandString, resolve, reject) => {
+
+        this.clearActiveCommandLine()
+
+        let separator = "_";
+        if (args.panel_card.indexOf(',') != -1) { separator = "," }
+
+        let panel = args.panel_card.split(separator)[0] - 1;
+        let card = args.panel_card.split(separator)[1] - 1;
+
+        this.destroyCommandOutput(panel, card);
+
+        resolve(this);
+
+      });
+
+    this.commandRegistry.command('remove panel', "move card to different panel", "UI")
+      .action((args, commandString, resolve, reject) => {
+
+        this.clearActiveCommandLine()
+
+        let separator = "_";
+        if (args.panel1_card1.indexOf(',') != -1) { separator = "," }
+
+        let panel1 = args.panel1_card1.split(separator)[0] - 1;
+        let card1 = args.panel1_card1.split(separator)[1] - 1;
+        let panel2 = args.panel2 - 1
+        let elem = this.commandOutputComponentLists[panel1][card1].instance.element.nativeElement;
+        this.moveCommandOutputToSplitByIndex(elem, panel2);
+
+        resolve(this);
+
+      });
+
+    this.commandRegistry.command('batch', "execute a batch of commands", "UI")
+      .option('-c, --command', 'command to run')
+      .action((args, commandString, resolve, reject) => {
+
+        this.clearActiveCommandLine()
+
+        if (!args.options.command.length) {
+          //no commands provided, show box for entering
+        } else {
+          for (let i = 0; i < args.options.command.length; i++) {
+            let f = this.commandRegistry.parseCommand("help");
+
+          }
+        }
+
+        // this.api.report(args.message, args.options.type)
+      })
+
+
+
+    this.commandRegistry.command('startwith <command>', 'add command to a list of commands executed at startup', "UI")
+      .action((args, commandString, resolve, reject) => {
+
+        this.clearActiveCommandLine()
+        let command = commandString.substr(10).trim();
+        if (command == "clear") {
+          this.commandRegistry.clearStartupCommands();
+        } else {
+          this.commandRegistry.addToStartupCommands(command);
+        }
+      })
+
+    
+      // TODO:
+    // this.commandRegistry.command("ui viewer", "display help for items when the mouse is over them", "UI")
+    // .action((args, commandString, resolve, reject) => {
+
+
+    //   let cmdContainer = this.insertComponent(RealtimehelpComponent, commandString).cmdContainer;
+
+    //   cmdContainer.commandString = commandString;
+    //   this.clearActiveCommandLine()
+    //   resolve(this);
+
+    // })
   }
 
 
   
   registerCommands() {
 
-    this.commandRegistry.registerCallbackWhenCommmandDoesNotExist((args) => {
-      let cmdContainerInstance = this.insertComponent().cmdContainer;
-      cmdContainerInstance.placeInContainer(`${args.commandName}: <span style="color:orange">no such command<span>`);
-      cmdContainerInstance.hideCommand();
-      this.clearActiveCommandLine()
-    })
 
-    // this.commandRegistry.command("help", "this help text", "help")
-    //   .action((args, commandString, resolve, reject) => {
-    //     let cmdContainer = this.insertComponent(null, 'help').cmdContainer;
 
-    //     for (var i = 0; i < args.helpItems.length; i++) {
-    //       cmdContainer.container.insert(args.helpItems[i].hostView);
-    //     }
-    //     this.clearActiveCommandLine()
-    //     resolve(this);
-    //   })
+
 
     // this.commandRegistry.command("echo <text>", "print html into the output", "unlisted")
     //   .action((args, commandString, resolve, reject) => {
@@ -1369,123 +1471,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command('what now', "recommendations on how to interact with the system", "UI")
-    //   .action((args, commandString, resolve, reject) => {
-    //     let components = this.insertComponent(WhatnowComponent, commandString);
-    //     let whatNowComponent = components.component;
-    //     resolve();
-    //     this.clearActiveCommandLine();
-    //   })
 
-    // this.commandRegistry.command('panel <number>', "make numbered panel active or add new panel to screen", "UI")
-    //   .action((args, commandString, resolve, reject) => {
-    //     this.clearActiveCommandLine()
-    //     if (!args.number) {
-    //       this.newSplit();
-
-    //     } else if (args.number <= this.splits) {
-    //       //choose the panel
-    //       this.activeTab = args.number - 1;
-    //     }
-    //     this.changeDetector.detectChanges();
-    //     resolve(this);
-
-    //   });
-
-    // this.commandRegistry.command('move card <panel1_card1> <panel2>', "move card to different panel", "UI")
-    //   .action((args, commandString, resolve, reject) => {
-
-    //     this.clearActiveCommandLine()
-
-    //     let separator = "_";
-    //     if (args.panel1_card1.indexOf(',') != -1) { separator = "," }
-
-    //     let panel1 = args.panel1_card1.split(separator)[0] - 1;
-    //     let card1 = args.panel1_card1.split(separator)[1] - 1;
-    //     let panel2 = args.panel2 - 1
-    //     let elem = this.commandOutputComponentLists[panel1][card1].instance.element.nativeElement;
-    //     this.moveCommandOutputToSplitByIndex(elem, panel2);
-
-    //     resolve(this);
-
-    //   });
-
-    // this.commandRegistry.command('destroy card <panel_card>', "remove card", "UI")
-    //   .action((args, commandString, resolve, reject) => {
-
-    //     this.clearActiveCommandLine()
-
-    //     let separator = "_";
-    //     if (args.panel_card.indexOf(',') != -1) { separator = "," }
-
-    //     let panel = args.panel_card.split(separator)[0] - 1;
-    //     let card = args.panel_card.split(separator)[1] - 1;
-
-    //     this.destroyCommandOutput(panel, card);
-
-    //     resolve(this);
-
-    //   });
-
-    // this.commandRegistry.command('remove panel', "move card to different panel", "UI")
-    //   .action((args, commandString, resolve, reject) => {
-
-    //     this.clearActiveCommandLine()
-
-    //     let separator = "_";
-    //     if (args.panel1_card1.indexOf(',') != -1) { separator = "," }
-
-    //     let panel1 = args.panel1_card1.split(separator)[0] - 1;
-    //     let card1 = args.panel1_card1.split(separator)[1] - 1;
-    //     let panel2 = args.panel2 - 1
-    //     let elem = this.commandOutputComponentLists[panel1][card1].instance.element.nativeElement;
-    //     this.moveCommandOutputToSplitByIndex(elem, panel2);
-
-    //     resolve(this);
-
-    //   });
-
-    // this.commandRegistry.command('batch', "execute a batch of commands", "UI")
-    //   .option('-c, --command', 'command to run')
-    //   .action((args, commandString, resolve, reject) => {
-
-    //     this.clearActiveCommandLine()
-
-    //     if (!args.options.command.length) {
-    //       //no commands provided, show box for entering
-    //     } else {
-    //       for (let i = 0; i < args.options.command.length; i++) {
-    //         let f = this.commandRegistry.parseCommand("help");
-
-    //       }
-    //     }
-
-    //     // this.api.report(args.message, args.options.type)
-    //   })
-
-    // this.commandRegistry.command("ui viewer", "display help for items when the mouse is over them", "UI")
-    //   .action((args, commandString, resolve, reject) => {
-
-
-    //     let cmdContainer = this.insertComponent(RealtimehelpComponent, commandString).cmdContainer;
-
-    //     cmdContainer.commandString = commandString;
-    //     this.clearActiveCommandLine()
-    //     resolve(this);
-
-    //   })
-
-    // this.commandRegistry.command('startwith <command>', 'add command to a list of commands executed at startup', "UI")
-    //   .action((args, commandString, resolve, reject) => {
-
-    //     this.clearActiveCommandLine()
-    //     let command = commandString.substr(10).trim();
-    //     if (command == "clear") {
-    //       this.commandRegistry.clearStartupCommands();
-    //     } else {
-    //       this.commandRegistry.addToStartupCommands(command);
-    //     }
-    //   })
   }
 
 

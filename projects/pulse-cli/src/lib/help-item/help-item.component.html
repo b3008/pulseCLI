@@ -1,0 +1,14 @@
+<div id="helpItem">
+  <div style="display:flex;">
+      
+    <div class="title"  [innerHTML]="title | safeHtml" (click)="titleClicked()"></div>
+    <div class="description" [innerHTML]="description | safeHtml" (click)="toggleExpanded()"></div>
+    <div [hidden] = "!hasText()&&isTogglingAllowed()">
+      <div style="margin-left:20px;"[hidden]="!expanded" (click)="toggleExpanded()">[less]</div> 
+      <div style="margin-left:20px;"[hidden]="expanded" (click)="toggleExpanded()">[more]</div> 
+    </div>
+  </div>
+  <div  #expandWrapper class="text expand-wrapper" [class.collapsed]="!expanded" [innerHTML]="text | safeHtml">
+    
+  </div>
+</div>

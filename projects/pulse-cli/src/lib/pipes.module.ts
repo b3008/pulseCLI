@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
 import { SafeHtmlPipe } from './safe-html';
+import { CommonModule } from '@angular/common'
 @NgModule({
 	declarations: [SafeHtmlPipe],
-	imports: [],
+	imports: [CommonModule],
 	exports: [SafeHtmlPipe]
 })
 export class PipesModule {
 
-	// static forRoot(){
-	// 	return {
-	// 		ngModule: PipesModule,
-	// 		providers:[],
-	// 	};
-	// }
+
 }

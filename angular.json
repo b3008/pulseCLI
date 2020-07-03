@@ -104,16 +104,9 @@
               "**/node_modules/**"
             ]
           }
-        },
-
-        "deploy": {
-          "builder": "angular-cli-ghpages:deploy",
-          "options": {
-            "baseHref": "https://b3008.github.io/pulseCLI/",
-            "name": "pulseCLI",
-            "email": "team@angular.schule"
-          }
         }
+
+
 
 
       }

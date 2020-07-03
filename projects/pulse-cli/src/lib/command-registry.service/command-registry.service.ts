@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, ChangeDetectorRef } from '@angular/core';
-// import { MarkdownDisplayComponent } from '../../components/markdown-display/markdown-display.component';
-// import { HelpItemComponent } from '../../components/help-item/help-item.component';
+import { MarkdownDisplayComponent } from '../markdown-display/markdown-display.component';
+import { HelpItemComponent } from '../help-item/help-item.component';
 // import { Storage } from '@ionic/storage';
 
 // import { ApiService } from "../api/api.service";
 import { Subject } from 'rxjs';
-// import * as Showdown from 'showdown';
+import * as Showdown from 'showdown';
 
 // import about from '../../markdown_texts/about.md'
 
@@ -195,11 +195,11 @@ export class CommandRegistryService {
       this.addToHistory(commandString);
     }
 
-    // if ((commandString === "help") || (commandString === "?")) {
-    //   return new Promise((resolve, reject) => {
-    //     this.commands["help"].callback({ helpItems: this.compileHelp() }, "help", resolve, reject)
-    //   })
-    // }
+    if ((commandString === "help") || (commandString === "?")) {
+      return new Promise((resolve, reject) => {
+        this.commands["help"].callback({ helpItems: this.compileHelp() }, "help", resolve, reject)
+      })
+    }
     
 
 
@@ -364,67 +364,69 @@ export class CommandRegistryService {
     return suggestions;
   }
 
-  // public compileHelp() {
-  //   let commandNamesList = Object.keys(this.commands);
+  public compileHelp() {
+    let commandNamesList = Object.keys(this.commands);
 
-  //   let helpItems = [];
+    let helpItems = [];
 
-  //   let aboutItemRef = this.componentFactoryResolver.resolveComponentFactory(MarkdownDisplayComponent).create(this.injector);
-  //   aboutItemRef.instance.text = new Showdown.Converter().makeHtml(about);
-  //   helpItems.push(aboutItemRef);
+    // let aboutItemRef = this.componentFactoryResolver.resolveComponentFactory(MarkdownDisplayComponent).create(this.injector);
+    // aboutItemRef.instance.text = new Showdown.Converter().makeHtml(about);
+    // helpItems.push(aboutItemRef);
 
-  //   let categoryNames = Object.keys(this.categories);
+    let categoryNames = Object.keys(this.categories);
 
-  //   for (let j = 0; j < categoryNames.length; j++) {
-  //     if (categoryNames[j] === "unlisted") {
-  //       continue;
-  //     }
+    for (let j = 0; j < categoryNames.length; j++) {
+      if (categoryNames[j] === "unlisted") {
+        continue;
+      }
 
-  //     let categoryItemRef = this.componentFactoryResolver.resolveComponentFactory(MarkdownDisplayComponent).create(this.injector);
-  //     categoryItemRef.instance.text = new Showdown.Converter().makeHtml(`#${categoryNames[j]}`);
-  //     helpItems.push(categoryItemRef);
-  //     let commandsInCategory = this.categories[categoryNames[j]];
+      let categoryItemRef = this.componentFactoryResolver.resolveComponentFactory(MarkdownDisplayComponent).create(this.injector);
+      categoryItemRef.instance.text = new Showdown.Converter().makeHtml(`#${categoryNames[j]}`);
+      helpItems.push(categoryItemRef);
+      let commandsInCategory = this.categories[categoryNames[j]];
     
 
-  //     for (let i = 0; i < commandsInCategory.length; i++) {
+      for (let i = 0; i < commandsInCategory.length; i++) {
 
-  //       // for(let i=0; i<commandNamesList.length; i++){
-  //       // let cmd = commandsInCategoryNamesList[i]; 
+        // for(let i=0; i<commandNamesList.length; i++){
+        // let cmd = commandsInCategoryNamesList[i]; 
 
-  //       let cmdObject = commandsInCategory[i];
+        let cmdObject = commandsInCategory[i];
     
-  //       let cmdArguments = cmdObject.arguments.join(" ");
-  //       let title = cmdObject.name + " " + cmdArguments;
-  //       let optionsText = "";
-  //       for (let k = 0; k < cmdObject.options.length; k++) {
-  //         let opt = cmdObject.options[k];
-  //         optionsText += `
-  //         <div style="display:flex">    
-  //           <div style="width:50%">${opt.flags.replace(/[<]/g, '&lt;')}</div>
-  //           <div style="width:50%">${opt.description.replace(/[<]/g, '&lt;')}</div>
-  //         </div>
-  //         `
-  //       }
-  //       let itemRef = this.componentFactoryResolver.resolveComponentFactory(HelpItemComponent).create(this.injector);
+        let cmdArguments = cmdObject.arguments.join(" ");
+        let title = cmdObject.name + " " + cmdArguments;
+        let optionsText = "";
+        for (let k = 0; k < cmdObject.options.length; k++) {
+          let opt = cmdObject.options[k];
+          optionsText += `
+          <div style="display:flex">    
+            <div style="width:50%">${opt.flags.replace(/[<]/g, '&lt;')}</div>
+            <div style="width:50%">${opt.description.replace(/[<]/g, '&lt;')}</div>
+          </div>
+          `
+        }
+        let itemRef = this.componentFactoryResolver.resolveComponentFactory(HelpItemComponent).create(this.injector);
 
-  //       itemRef.instance.title = title.replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
-  //       if (cmdObject.description) {
-  //         itemRef.instance.description = cmdObject.description.replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
-  //       } else {
-  //         itemRef.instance.description = '(no description provided)';
-  //       }
-  //       itemRef.instance.commandObj = cmdObject;
-  //       // console.log(this.commands[cmd].getCommandTextExample());
-  //       itemRef.instance.text = optionsText;
-  //       helpItems.push(itemRef);
+        itemRef.instance.title = title.replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
+        if (cmdObject.description) {
+          itemRef.instance.description = cmdObject.description.replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
+        } else {
+          itemRef.instance.description = '(no description provided)';
+        }
+        itemRef.instance.commandObj = cmdObject;
+        // console.log(this.commands[cmd].getCommandTextExample());
+        itemRef.instance.text = optionsText;
+        helpItems.push(itemRef);
 
-  //     }
+      }
 
-  //   }
+    }
 
 
-  //   return helpItems;
-  // }
+    return helpItems;
+  }
+
+
 }
 
 export class OpCommand {
