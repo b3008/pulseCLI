@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, ChangeDetectorRef } from '@angular/core';
 import { MarkdownDisplayComponent } from '../markdown-display/markdown-display.component';
-import { HelpItemComponent } from '../help-item/help-item.component';
+import { HelpItemComponent } from '../components/help-item/help-item.component';
 // import { Storage } from '@ionic/storage';
 
 // import { ApiService } from "../api/api.service";

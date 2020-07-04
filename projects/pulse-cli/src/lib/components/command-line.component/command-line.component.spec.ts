@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommandLineComponent } from './command-line.component';
 import { HttpClientModule} from '@angular/common/http';
-import { IonicStorageModule } from '@ionic/storage';
+
 
 describe('CommandLineComponent', () => {
   let component: CommandLineComponent;
@@ -12,7 +12,7 @@ describe('CommandLineComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ CommandLineComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [HttpClientModule, IonicStorageModule.forRoot()]
+      imports: [HttpClientModule]
     })
     .compileComponents();
   }));

@@ -7,14 +7,15 @@ import {
   ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, ChangeDetectorRef,
   ViewEncapsulation,
   QueryList,
-  ResolvedReflectiveFactory
+  ResolvedReflectiveFactory,
+  Inject
 
 } from '@angular/core';
-import { CommandOutputComponent } from '../command-output.component/command-output.component';
-import { CommandLineComponent } from '../command-line.component/command-line.component';
+import { CommandOutputComponent } from '../components/command-output.component/command-output.component';
+import { CommandLineComponent } from '../components/command-line.component/command-line.component';
 import { CommandRegistryService } from '../command-registry.service/command-registry.service';
 import { PulseCLIService } from '../pulse-cli.service';
-
+ 
 
 
 declare var window;
@@ -92,6 +93,7 @@ export class PulseCLIComponent implements OnInit {
   socketServiceObserver;
 
   constructor(
+    
     public elementRef: ElementRef,
     private componentFactoryResolver: ComponentFactoryResolver,
     public renderer: Renderer2,

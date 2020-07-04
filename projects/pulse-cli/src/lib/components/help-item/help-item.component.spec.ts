@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { PipesModule } from '../../pipes/pipes.module';
+import { PipesModule } from '../../pipes.module';
 import { HelpItemComponent } from './help-item.component';
 
 describe('HelpItemComponent', () => {

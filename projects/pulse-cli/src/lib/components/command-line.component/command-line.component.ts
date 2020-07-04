@@ -1,7 +1,8 @@
-import { Component, OnInit, ElementRef,ViewChild, Input, Renderer2 } from '@angular/core';
+import { Component, OnInit, ElementRef,ViewChild, Input, Renderer2, Inject } from '@angular/core';
 // import {SocketService} from '../../services/socket/socket.service';
-import {CommandRegistryService} from '../command-registry.service/command-registry.service';
+import {CommandRegistryService} from '../../command-registry.service/command-registry.service';
 // import {SuggestionBoxComponent} from '../suggestion-box/suggestion-box.component'
+
 
 @Component({
   selector: 'command-line',
@@ -29,9 +30,11 @@ export class CommandLineComponent implements OnInit {
 
   
 
-  constructor(public elementRef: ElementRef,
-              private renderer: Renderer2,
-              private commandRegistry: CommandRegistryService,
+  constructor(
+
+    public elementRef: ElementRef,
+    private renderer: Renderer2,
+    private commandRegistry: CommandRegistryService,
               // private sp:SocketService
               ) {
     

@@ -1,6 +1,8 @@
 import {Component, ElementRef, EventEmitter, Output, ViewChild, ViewContainerRef, ChangeDetectorRef, Renderer2, Pipe, PipeTransform, ComponentFactoryResolver, OnInit} from '@angular/core';
-import { PulseCLIService } from '../pulse-cli.service';
-import {CommandRegistryService} from '../command-registry.service/command-registry.service';
+import { PulseCLIService } from '../../pulse-cli.service';
+import {CommandRegistryService} from '../../command-registry.service/command-registry.service';
+
+
 
 // import { SafeHtmlPipe } from '../safe-html';
 

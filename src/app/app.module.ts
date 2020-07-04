@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { PulseCLIModule } from '../../projects/pulse-cli/src/lib/pulse-cli.component/pulse-cli.module';
 import { PipesModule } from '../../projects/pulse-cli/src/lib/pipes.module';
 
+
+
 @NgModule({
   declarations: [
     AppComponent

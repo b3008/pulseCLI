@@ -1,5 +1,5 @@
 import { Component, Input , ViewChild, ElementRef, Output, EventEmitter, OnInit} from '@angular/core';
-import {OpCommand} from '../command-registry.service/command-registry.service';
+import {OpCommand} from '../../command-registry.service/command-registry.service';
 
 @Component({
   selector: 'help-item',
