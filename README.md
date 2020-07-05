@@ -2,7 +2,8 @@
 
 Building interfaces for webapps can be a complex task that can get in the way of component development and testing, especially under conditions that multiple stakeholders are involved.
 
-pulseCLI is a stand-in-until-you-make-your UI component that can help you get your project up and running.
+[pulseCLI](https://b3008.github.io/pulseCLI/) is a stand-in-until-you-make-your UI component that can help you get your project up and running.
+
 
 <!-- 
 ## Development server
