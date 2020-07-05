@@ -10,9 +10,11 @@ import { PipesModule } from '../../projects/pulse-cli/src/lib/pipes.module';
 
 
 
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,7 @@
     <div class="outputHeader" (mousedown)="outputHeaderMouseDown($event)" (mouseup)="outputHeaderMouseUp()">
         <div (click)="outputHeaderClicked()" class="commandString mat-small">{{commandString}}</div>
         <div (click)="destroyCommandOutput($event)">
-            <span class="close-button" name="close-circle"><img src="/assets/close-icon.svg"> </span>
+            <div class="close-button"></div>
         </div>
     </div>
     <div class="contentContainer" style="height:100%">
