@@ -2,90 +2,88 @@
 
 
 :host {
-  display: block;
-  
-  position: relative;
-  
-  height: 100%;
-  font-family: 'IBM Plex Sans';
+  display: flex;
+  position: absolute;
+  font-family: sans-serif;
+  border:solid;
+  left:0px;
+  bottom:0px;
+  top:0px;
+  right:0px;
 } 
 
 
 #pageContainer-across{
   display:flex;
   flex-direction:row;
-  height:100vh;
+  // height:100vh;
+  align-items: stretch;
+  align-content:flex-end;
+  width:100%;
 }
 
 
 #menubar-vertical{
-  // flex-grow:1;
+  flex-grow:0;
   display: flex;
   flex-direction: column;
   align-items:center;
   position: relative;
-  padding:5px;
+  padding:2px;
   border-right:solid thin gray;
 }
 
 #menubar-vertical button {
 
-	box-shadow:inset 0px 1px 0px 0px darkgray;
-	background:linear-gradient(to bottom, darkgray 5%, gray 100%);
-	background-color:lightgray;
-	border:1px solid gray;
+	// box-shadow:inset 0px 1px 0px 0px darkgray;
+	// background:linear-gradient(to bottom, darkgray 5%, gray 100%);
+	background-color:#EEE;
+  border:1px solid lightgray;
+  border-radius:5px;
   display:block;
   width:100%;
+  height:45px;
 	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
+	color:#555;
+	font-family:sans-serif;
 	font-size:13px;
 	font-weight:bold;
 	padding:6px 12px;
   text-decoration:none;
   outline:none;
-  margin:5px;
+  margin:1px;
 }
 
 #menubar-vertical button:hover {
-	background:linear-gradient(to bottom, gray 5%, darkgray 100%);
-	background-color:lightgray;
-}
-
-// #menubar-vertical button:active {
-// 	position:relative;
-// 	top:1px;
-// }
-
-
-.splitButton {
-
-
-  position: relative;
+	background-color:#FFF;
 }
 
 
 
 
-#splitContainer{
-  flex-grow:2;
+
+#panelContainer{
+  flex-grow:1;
   display:flex; 
   flex-wrap:nowrap; 
   width:100%; 
-  height:100%;
-  font-family: 'IBM Plex Sans'
+
+  font-family: 'IBM Plex Sans';
+  border:solid;
+
+  position:relative;
 }
 
-.split {
+.panel {
   display: flex;
-  width: 100%;
+  // width: 100%;
   flex-grow: 2;
   // overflow:hidden;
   position:relative;
   height:100%;
 }
 
-.splitSeparator {
+.panelSeparator {
   box-sizing: border-box;
   background-color: black;
   width: 5px;
@@ -95,7 +93,7 @@
   border-left: dashed thin gray;
   cursor: ew-resize;
 }
-.splitSeparator:hover {
+.panelSeparator:hover {
   box-sizing: border-box;
   
   width: 5px;
@@ -107,7 +105,7 @@
 
 .panelHeader {
   position: relative;
-  padding-right: 10px;
+  // padding-right: 10px;
   text-align: right;
   
   color:$foreground;
@@ -194,14 +192,24 @@
   border-top: solid thin gray;
 }
 
-.movingProxy {
+.dropIntoPanelIndicator {
   position: absolute;
   display: none;
-  border: dashed 5px mat-color($app-accent,100);
+  // width:100%;
+  border: dashed 4px red;
   height:100%;
   top: 0px;
-  left: 0px;
+  /*
+  although the translation transform that happens
+  in pulse-cli.component.ts::mouseMoveWhileCommandOutputMouseDown
+  has the correct displacement offset, for some unknown yet reason, 
+  this box is place sme pixels to the right, so this 
+  value for left is to offset that
+  */
+  left: -3px;
   z-index: 1000;
+  pointer-events: none;
+  box-sizing: border-box;
 }
 
 div.mat-select-arrow{

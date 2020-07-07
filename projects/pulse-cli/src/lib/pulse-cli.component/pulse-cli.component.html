@@ -1,5 +1,5 @@
 <div id="pageContainer-across" (mouseover)="mouseover($event)" (keydown)="keydown($event)" (keyup)="keyup($event)"
-  (mouseup)="splitContainerMouseUp($event)" tabindex="0">
+  (mouseup)="panelContainerMouseUp($event)" tabindex="0">
 
   <div id="menubar-vertical">
 
@@ -12,20 +12,20 @@
     </button>
   </div>
 
-  <div id="splitContainer" #splitContainer (mouseup)="splitContainerMouseUp($event)"
-    (mouseup)="mouseUpWhileCommandOutputMouseDown()" (mousemove)="splitContainerMousemove($event)"
+  <div id="panelContainer" #panelContainer (mouseup)="panelContainerMouseUp($event)"
+    (mouseup)="mouseUpWhileCommandOutputMouseDown()" (mousemove)="panelContainerMousemove($event)"
     (mousemove)="mouseMoveWhileCommandOutputMouseDown($event)"
     (commandOutputHeaderHasMouseDown)="commandOutputHeaderHasMouseDown($event)">
 
-    <div #movingProxy class="movingProxy"></div>
 
-    <div #splitChild *ngFor="let split of commandOutputComponentLists;let i=index;" class="split"
-      [style.width]="splitWidthArr[i] +  '%'" (click)="selectSplitFromEmptyPanelClick($event, i)">
 
-      <div class="splitContent" style="position:relative; width:100%; height:100%">
+    <div #panelChild *ngFor="let panel of commandOutputComponentLists;let i=index;" class="panel"
+      [style.width]="splitWidthArr[i] +  '%'" (click)="selectPanelFromEmptyClick($event, i)">
+
+      <div class="panelContent" style="position:relative; width:100%; height:100%">
 
         <div *ngIf="commandOutputComponentLists.length>0" class="panelHeader" [class.active]="activeTab==i"
-          (click)="selectSplit(i)">
+          (click)="selectPanel(i)">
 
           <div *ngIf="commandComponentHistories[i].length==0" class="panelTitle mat-caption">panel {{i+1}}</div>
 
@@ -88,8 +88,8 @@
 
 
 
-      <div *ngIf="shouldRenderSeparator(i)" [attr.data-index]=i class="splitSeparator"
-        (mousedown)="splitSeparatorMousedown($event ,i)" (mouseup)="splitSeparatorMouseup($event, i)">
+      <div *ngIf="shouldRenderSeparator(i)" [attr.data-index]=i class="panelSeparator"
+        (mousedown)="panelSeparatorMousedown($event ,i)" (mouseup)="panelSeparatorMouseup($event, i)">
 
 
       </div>
@@ -103,3 +103,5 @@
   </div>
 
 </div>
+
+<div #dropIntoPanelIndicator class="dropIntoPanelIndicator"></div>

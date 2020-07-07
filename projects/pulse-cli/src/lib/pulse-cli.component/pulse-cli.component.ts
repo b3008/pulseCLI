@@ -35,19 +35,15 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-
-
-
-  @ViewChild('terminal', { read: ElementRef }) terminalContainer: ElementRef;
   @ViewChild('outputContainer', { read: ElementRef }) outputContainer: ElementRef;
   @ViewChildren('outputContainer', { read: ViewContainerRef }) outputContainerChildren;
-  @ViewChild('output', { read: ViewContainerRef }) output: ViewContainerRef;
+  
   @ViewChildren('output', { read: ViewContainerRef }) outputChildren;
   @ViewChildren(CommandLineComponent) commandLine;
 
-  @ViewChild('splitContainer', { read: ElementRef, static: true }) splitContainer: ElementRef;
-  @ViewChildren('splitChild', { read: ElementRef }) splitChildren;
-  @ViewChild('movingProxy', { read: ViewContainerRef, static: true }) movingProxy: ViewContainerRef;
+  @ViewChild('panelContainer', { read: ElementRef, static: true }) panelContainer: ElementRef;
+  @ViewChildren('panelChild', { read: ElementRef }) panelChildren;
+  @ViewChild('dropIntoPanelIndicator', { read: ViewContainerRef, static: true }) dropIntoPanelIndicator: ViewContainerRef;
 
   // @ViewChildren("matSelectForCommandHistories", { read: MatSelect }) matSelectForCommandHistories: QueryList<MatSelect>;
 
@@ -55,7 +51,7 @@ export class PulseCLIComponent implements OnInit {
   splits = 1;
   splitWidthArr = new Array(this.splits);
   splitSeparatorArr = new Array(this.splits);
-  indexOfSplitWithMaximumOverlap;
+  indexOfPanelWithMaximumOverlap;
 
   //this two arrays hold lists of commandOutputComponents that correspond to each split  
   commandOutputComponentLists = [new Array()];
@@ -144,6 +140,7 @@ export class PulseCLIComponent implements OnInit {
 
   ngOnInit() {
 
+    // this.changeDetector.detach();
     console.log("ngOnInit");
     this.registerUICommands();
     // this.registerCommands()
@@ -1762,17 +1759,17 @@ export class PulseCLIComponent implements OnInit {
 
 
   indexOfSeparatorMouseDown = null;;
-  splitSeparatorMousedown(event, index) {
+  panelSeparatorMousedown(event, index) {
 
     this.splitSeparatorArr[index].mousedown = true;
     this.indexOfSeparatorMouseDown = index;
 
   }
 
-  splitSeparatorMouseup(event, index) {
+  panelSeparatorMouseup(event, index) {
 
   }
-  splitContainerMouseUp(event) {
+  panelContainerMouseUp(event) {
     for (let i = 0; i < this.splitSeparatorArr.length; i++) {
       this.splitSeparatorArr[i].mousedown = false;
     }
@@ -1782,14 +1779,14 @@ export class PulseCLIComponent implements OnInit {
   lastMouseMoveEvent;
 
 
-  splitContainerMousemove(event) {
+  panelContainerMousemove(event) {
     this.lastMouseMoveEvent = event;
     let index = this.indexOfSeparatorMouseDown;
 
     if (index === null) return;
     if (this.splitSeparatorArr[index].mousedown) {
 
-      let movePercent = 100 * event.movementX / parseInt(window.getComputedStyle(this.splitContainer.nativeElement).width)
+      let movePercent = 100 * event.movementX / parseInt(window.getComputedStyle(this.panelContainer.nativeElement).width)
 
       this.splitWidthArr[index] += movePercent;
       if (this.splitWidthArr[index + 1]) {
@@ -1807,7 +1804,7 @@ export class PulseCLIComponent implements OnInit {
   startMovingCommandOutputMovementX = 0;
   startMovingCommandOutputMovementY = 0;
   startMovingCommandOutputTimeout;
-  splitBoundingClientRects = [];
+  panelBoundingClientRects = [];
 
   commandOutputNativeElementToMoveAround = null;
   commandOutputNativeElementOriginalZIndex;
@@ -1843,9 +1840,9 @@ export class PulseCLIComponent implements OnInit {
 
   prepareStartMoving() {
     this.startMovingCommandOutput = true;
-    this.splitBoundingClientRects = [];
-    for (let i = 0; i < this.splitChildren.toArray().length; i++) {
-      this.splitBoundingClientRects.push(this.splitChildren.toArray()[i].nativeElement.getBoundingClientRect())
+    this.panelBoundingClientRects = [];
+    for (let i = 0; i < this.panelChildren.toArray().length; i++) {
+      this.panelBoundingClientRects.push(this.panelChildren.toArray()[i].nativeElement.getBoundingClientRect())
     }
     let movingBox = this.commandOutputNativeElementToMoveAround.getBoundingClientRect();
     let mme = this.lastMouseMoveEvent;
@@ -1884,11 +1881,11 @@ export class PulseCLIComponent implements OnInit {
 
     let overlaps = [];
     let wh = []
-    this.indexOfSplitWithMaximumOverlap = -1;
+    this.indexOfPanelWithMaximumOverlap = -1;
     let chosenRect;
     let currentMaxOverlap = 0;
-    for (let i = 0; i < this.splitBoundingClientRects.length; i++) {
-      let sRect = this.splitBoundingClientRects[i];
+    for (let i = 0; i < this.panelBoundingClientRects.length; i++) {
+      let sRect = this.panelBoundingClientRects[i];
       let x1 = sRect.x; let l1 = sRect.width;
       let y1 = sRect.y; let h1 = sRect.height;
       let w = 0; let h = 0;
@@ -1909,20 +1906,20 @@ export class PulseCLIComponent implements OnInit {
       if (i > 0) {
         if (o >= currentMaxOverlap) {
           currentMaxOverlap = o;
-          this.indexOfSplitWithMaximumOverlap = i;
+          this.indexOfPanelWithMaximumOverlap = i;
           chosenRect = sRect;
         }
       } else {
         currentMaxOverlap = o;
-        this.indexOfSplitWithMaximumOverlap = i;
+        this.indexOfPanelWithMaximumOverlap = i;
         chosenRect = sRect;
       }
     }
 
-    this.renderer.setStyle(this.movingProxy.element.nativeElement, "transform", `translate(${chosenRect.x}px, ${chosenRect.y}px)`);
-    this.renderer.setStyle(this.movingProxy.element.nativeElement, "width", chosenRect.width + "px");
-    this.renderer.setStyle(this.movingProxy.element.nativeElement, "height", chosenRect.height - 50 + "px");
-    this.renderer.setStyle(this.movingProxy.element.nativeElement, "display", "block");
+    this.renderer.setStyle(this.dropIntoPanelIndicator.element.nativeElement, "transform", `translate(${chosenRect.x}px, ${chosenRect.y}px)`);
+    this.renderer.setStyle(this.dropIntoPanelIndicator.element.nativeElement, "width", chosenRect.width + "px");
+    this.renderer.setStyle(this.dropIntoPanelIndicator.element.nativeElement, "height", chosenRect.height - 50 + "px");
+    this.renderer.setStyle(this.dropIntoPanelIndicator.element.nativeElement, "display", "block");
 
   }
 
@@ -1946,15 +1943,15 @@ export class PulseCLIComponent implements OnInit {
     this.startMovingCommandOutputMovementY = 0;
 
     this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "opacity", "1");
-    this.renderer.setStyle(this.movingProxy.element.nativeElement, "display", "none");
+    this.renderer.setStyle(this.dropIntoPanelIndicator.element.nativeElement, "display", "none");
 
     this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "transform", "");
     this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "z-index", this.commandOutputNativeElementOriginalZIndex);
     this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "position", "");
 
-    // this.moveCommandOutputToSplitByIndex(this.commandOutputNativeElementToMoveAround, this.indexOfSplitWithMaximumOverlap);
+    // this.moveCommandOutputToSplitByIndex(this.commandOutputNativeElementToMoveAround, this.indexOfPanelWithMaximumOverlap);
     let tabAndIndex = this.findComponentIndex(this.commandOutputNativeElementToMoveAround);
-    this.commandRegistry.parseCommand(`move card ${tabAndIndex.tab + 1},${tabAndIndex.index + 1}, ${this.indexOfSplitWithMaximumOverlap + 1}`);
+    this.commandRegistry.parseCommand(`move card ${tabAndIndex.tab + 1},${tabAndIndex.index + 1}, ${this.indexOfPanelWithMaximumOverlap + 1}`);
 
     this.headerDragX = 0;
     this.headerDragY = 0;
@@ -2044,11 +2041,11 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-  selectSplit(index) {
+  selectPanel(index) {
     this.activeTab = index;
 
   }
-  selectSplitFromEmptyPanelClick(event, index) {
+  selectPanelFromEmptyClick(event, index) {
     event.stopPropagation();
     if (this.commandOutputComponentLists[index].length == 0) {
       this.activeTab = index;
