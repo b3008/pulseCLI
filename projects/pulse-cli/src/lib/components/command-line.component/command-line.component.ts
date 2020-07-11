@@ -1,6 +1,6 @@
-import { Component, OnInit, ElementRef,ViewChild, Input, Renderer2, Inject } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input, Renderer2, Inject } from '@angular/core';
 // import {SocketService} from '../../services/socket/socket.service';
-import {CommandRegistryService} from '../../command-registry.service/command-registry.service';
+import { CommandRegistryService } from '../../command-registry.service/command-registry.service';
 // import {SuggestionBoxComponent} from '../suggestion-box/suggestion-box.component'
 
 
@@ -11,7 +11,7 @@ import {CommandRegistryService} from '../../command-registry.service/command-reg
 })
 export class CommandLineComponent implements OnInit {
 
- 
+
   rejectionPhrases = ["no", "nope", "won't happen", "don't know this one", "ouch"];
 
   text: string;
@@ -19,35 +19,23 @@ export class CommandLineComponent implements OnInit {
   mode = "normal"; //TODO: determine how command should be parsed, support JS or other modes
   type = "main";
 
-  @Input('command') public command:string;
+  @Input('command') public command: string;
   @ViewChild('divArea', { read: ElementRef, static: true }) divArea: ElementRef;
   @ViewChild('belowDivArea', { read: ElementRef }) belowDivArea: ElementRef;
   @ViewChild('speechBubbleContent', { read: ElementRef, static: true }) speechBubbleContent: ElementRef;
   @ViewChild('speechBubbleContainer', { read: ElementRef, static: true }) speechBubbleContainer: ElementRef;
   // @ViewChild('suggestionBox', {read:ElementRef}) suggestionBox: SuggestionBoxComponent;
 
-  keys$;
-
-  
 
   constructor(
-
     public elementRef: ElementRef,
     private renderer: Renderer2,
     private commandRegistry: CommandRegistryService,
-              // private sp:SocketService
-              ) {
-    
-    
-
-    
-
-  
-    
+  ) {
   }
 
-  ngOnInit(){
-  
+  ngOnInit() {
+
   }
 
   setMode(mode) {
@@ -55,82 +43,78 @@ export class CommandLineComponent implements OnInit {
   }
 
   keydown(event) {
-    //if it is arrow up or arrow down do something
+
 
     switch (event.keyCode) {
       case 9:
         //Tab
+        //on Tab, try to match given text with an existing command
         event.preventDefault();
         event.stopPropagation();
         this.autofill();
         break;
       case 38:
         //up
+        //on keyup, move backwards though history and paste command
         event.preventDefault();
         event.stopPropagation();
         let newText = this.commandRegistry.getFromHistory(-1);
-        if(newText){
-           this.divArea.nativeElement.innerText = newText;
+        if (newText) {
+          this.divArea.nativeElement.innerText = newText;
           let selection = window.getSelection();
-          selection.collapse( this.divArea.nativeElement.childNodes[ this.divArea.nativeElement.childNodes.length-1], newText.length)
+          selection.collapse(this.divArea.nativeElement.childNodes[this.divArea.nativeElement.childNodes.length - 1], newText.length)
         }
 
         // TODO: cycle through command history
         break;
       case 40:
         //down
+        //on keydown move forwards through history and paste command
         event.preventDefault();
         event.stopPropagation();
         let newText2 = this.commandRegistry.getFromHistory(1);
-        if(newText2) {
+        if (newText2) {
           this.divArea.nativeElement.innerText = newText2;
           let selection2 = window.getSelection();
-          selection2.collapse( this.divArea.nativeElement.childNodes[ this.divArea.nativeElement.childNodes.length-1], newText2.length)
+          selection2.collapse(this.divArea.nativeElement.childNodes[this.divArea.nativeElement.childNodes.length - 1], newText2.length)
         }
-        
+
         break;
     }
-    
+
   }
 
 
-  autofill(){
-    
+  autofill() {
+
     let content = this.divArea.nativeElement.innerText;
     let suggestions = this.commandRegistry.getAutofillSuggestions(content);
-    
-    if(suggestions.length === 1){
-      this.divArea.nativeElement.innerText =  suggestions[0];
-      let selection = window.getSelection();
-      selection.collapse( this.divArea.nativeElement.childNodes[ this.divArea.nativeElement.childNodes.length-1], suggestions[0].length)
-    } else if (suggestions.length>1){
-      
-      // this.suggestionBox.suggestions = suggestions;
-      // this.suggestionBox.hidden=false;
-      
 
-    }
+    if (suggestions.length === 1) {
+      this.divArea.nativeElement.innerText = suggestions[0];
+      let selection = window.getSelection();
+      selection.collapse(this.divArea.nativeElement.childNodes[this.divArea.nativeElement.childNodes.length - 1], suggestions[0].length)
+    } 
   }
 
-  public suggestionSelected(event){
+  public suggestionSelected(event) {
     this.setText(event.detail);
-    // this.suggestionBox.hidden=true;
     this.setFocusToCommandLine()
 
   }
-  
 
 
-  setFocusToCommandLine(){
-    
+
+  setFocusToCommandLine() {
+
     this.divArea.nativeElement.focus();
     let selection = window.getSelection();
-    
-    if(this.divArea.nativeElement.childNodes.length){
-      selection.collapse( this.divArea.nativeElement.childNodes[ this.divArea.nativeElement.childNodes.length-1], this.divArea.nativeElement.innerText.length)
+
+    if (this.divArea.nativeElement.childNodes.length) {
+      selection.collapse(this.divArea.nativeElement.childNodes[this.divArea.nativeElement.childNodes.length - 1], this.divArea.nativeElement.innerText.length)
     }
-    else{
-      selection.collapse( this.divArea.nativeElement, this.divArea.nativeElement.innerText.length)
+    else {
+      selection.collapse(this.divArea.nativeElement, this.divArea.nativeElement.innerText.length)
     }
   }
 
@@ -175,7 +159,7 @@ export class CommandLineComponent implements OnInit {
         //  Enter was pressed
         let commandString = this.divArea.nativeElement.innerText.trim();
 
-        this.elementRef.nativeElement.dispatchEvent(new CustomEvent('commandIssued', {detail: {command:commandString, local:false, enterIntoHistory:true}, bubbles: true}))
+        this.elementRef.nativeElement.dispatchEvent(new CustomEvent('commandIssued', { detail: { command: commandString, local: false, enterIntoHistory: true }, bubbles: true }))
         return false;
 
       }
@@ -187,12 +171,12 @@ export class CommandLineComponent implements OnInit {
   }
 
 
-  public setText(text){
-    this.divArea.nativeElement.innerText=text;
+  public setText(text) {
+    this.divArea.nativeElement.innerText = text;
     // let selection = window.getSelection();
     // selection.collapse( this.divArea.nativeElement.childNodes[ this.divArea.nativeElement.childNodes.length-1], this.divArea.nativeElement.innerText.length)
   }
- 
+
 
   hideBubbleContainer() {
     this.renderer.setStyle(this.speechBubbleContainer.nativeElement, 'opacity', '0');

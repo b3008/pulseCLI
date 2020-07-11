@@ -57,7 +57,6 @@
           </ng-container>
 
           <div *ngIf="commandOutputComponentLists.length>1">
-            <!-- <ion-icon class="separatorCloseIcon" name="close" (click)="closeSplit($event, i)"></ion-icon> -->
             <div class="close-button" name="close-circle"></div>
           </div>
         </div>
@@ -71,8 +70,6 @@
             (update)="changeDetector.detectChanges()" (bringCommandOutputToFront)="bringCommandOutputToFront($event,i)"
             (destroyCommandOutput)="destroyCommandOutputEvent($event, i)">
             <ng-container id="output" #output></ng-container>
-
-
           </div>
 
 
