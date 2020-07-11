@@ -1,8 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { PipesModule } from '../../pipes/pipes.module';
+import { PipesModule } from '../../pipes.module';
 import { HttpClientModule} from '@angular/common/http';
-import { IonicStorageModule } from '@ionic/storage';
 import { CommandOutputComponent } from './command-output.component';
 
 describe('CommandOutputComponent', () => {
@@ -13,7 +12,7 @@ describe('CommandOutputComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ CommandOutputComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports:[HttpClientModule, IonicStorageModule.forRoot(), PipesModule]
+      imports:[HttpClientModule,  PipesModule]
     })
     .compileComponents();
   }));
