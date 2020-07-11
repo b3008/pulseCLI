@@ -58,7 +58,7 @@ export class CommandLineComponent implements OnInit {
         //on keyup, move backwards though history and paste command
         event.preventDefault();
         event.stopPropagation();
-        let newText = this.commandRegistry.getFromHistory(-1);
+        let newText = this.commandRegistry.getHistoryOneStepBack();
         if (newText) {
           this.divArea.nativeElement.innerText = newText;
           let selection = window.getSelection();
@@ -72,7 +72,7 @@ export class CommandLineComponent implements OnInit {
         //on keydown move forwards through history and paste command
         event.preventDefault();
         event.stopPropagation();
-        let newText2 = this.commandRegistry.getFromHistory(1);
+        let newText2 = this.commandRegistry.getHistoryOneStepForward();
         if (newText2) {
           this.divArea.nativeElement.innerText = newText2;
           let selection2 = window.getSelection();

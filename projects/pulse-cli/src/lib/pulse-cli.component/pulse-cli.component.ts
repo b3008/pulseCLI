@@ -205,7 +205,7 @@ export class PulseCLIComponent implements OnInit {
 
   registerUICommands(){
 
-    this.commandRegistry.registerCallbackWhenCommmandDoesNotExist((args) => {
+    this.commandRegistry.registerCallbackForWhenCommmandDoesNotExist((args) => {
       let cmdContainerInstance = this.insertComponent().cmdContainer;
       cmdContainerInstance.placeInContainer(`${args.commandName}: <span style="color:orange">no such command<span>`);
       cmdContainerInstance.hideCommand();

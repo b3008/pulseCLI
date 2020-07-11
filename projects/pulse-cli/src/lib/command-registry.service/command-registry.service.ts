@@ -2,13 +2,9 @@ import { Injectable } from '@angular/core';
 import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, ChangeDetectorRef } from '@angular/core';
 import { MarkdownDisplayComponent } from '../markdown-display/markdown-display.component';
 import { HelpItemComponent } from '../components/help-item/help-item.component';
-// import { Storage } from '@ionic/storage';
 
-// import { ApiService } from "../api/api.service";
 import { Subject } from 'rxjs';
 import * as Showdown from 'showdown';
-
-// import about from '../../markdown_texts/about.md'
 
 declare var localStorage;
 
@@ -17,13 +13,13 @@ declare var localStorage;
 })
 export class CommandRegistryService {
 
-  commands: Object = {};
-  doesNotExistCallback: Function;
+
   commandHistory: Array<string> = [];
   commandHistoryIndex = 0;
 
+  commands: Object = {};
+  doesNotExistCallback: Function;
   commandSubject = new Subject<any>();
-
   categories = {};
 
 
@@ -32,29 +28,42 @@ export class CommandRegistryService {
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private injector: Injector,
-    // public api: ApiService,
-    // public storage: Storage
+
   ) {
+    // initialize command history from localstorage and set commandHistoryIndex indicator
     let history = localStorage.history;
     try {
       this.commandHistory = JSON.parse(localStorage.history);
       this.commandHistoryIndex = this.commandHistory.length - 1;
     }
     catch (e) {
+      // that's ok, there's no history
       console.warn("could not get history from localStorage")
     }
   }
 
-
+  
   public addToHistory(commandString) {
     this.commandHistory.push(commandString);
-    this.commandHistoryIndex = this.commandHistory.length;
-    if (this.commandHistory.length > 100) this.commandHistory.shift();
+    if (this.commandHistory.length > 100) {
+      this.commandHistory.shift();
+    }
+
+    this.commandHistoryIndex = this.commandHistory.length-1;
+    console.log("index", this.commandHistoryIndex);
     localStorage.history = JSON.stringify(this.commandHistory);
   }
 
-  public getFromHistory(i) {
-    this.commandHistoryIndex += i;
+  public getHistoryOneStepBack(){
+    return this.getAtStepsFromHistoryIndex(-1);
+  }
+
+  public getHistoryOneStepForward(){
+    return this.getAtStepsFromHistoryIndex(1);
+  }
+  
+  public getAtStepsFromHistoryIndex(steps) {
+    this.commandHistoryIndex += steps;
     if (this.commandHistoryIndex < 0) this.commandHistoryIndex = 0;
     if (this.commandHistoryIndex > this.commandHistory.length - 1) this.commandHistoryIndex = this.commandHistory.length - 1;
     return this.commandHistory[this.commandHistoryIndex];
@@ -87,9 +96,7 @@ export class CommandRegistryService {
 
 
 
-
-
-  public registerCallbackWhenCommmandDoesNotExist(callback) {
+  public registerCallbackForWhenCommmandDoesNotExist(callback) {
 
     this.doesNotExistCallback = callback;
   }
