@@ -195,7 +195,7 @@ export class CommandRegistryService {
   }
 
 
-  public parseCommand(commandString, indirectParams?) {
+  public parseCommand(commandString, indirectParams?):ParseResult {
 
     // this.api.saveCommandHistory(commandString, indirectParams || {}, {}, true);
     if (indirectParams) if (indirectParams.enterIntoHistory) {
@@ -203,9 +203,16 @@ export class CommandRegistryService {
     }
 
     if ((commandString === "help") || (commandString === "?")) {
-      return new Promise((resolve, reject) => {
-        this.commands["help"].callback({ helpItems: this.compileHelp() }, "help", resolve, reject)
-      })
+      // return new Promise((resolve, reject) => {
+      //   this.commands["help"].callback({ helpItems: this.compileHelp() }, "help", resolve, reject)
+      // })
+
+      return {
+        commandObject: this.commands["help"],
+        finalArguments: { helpItems: this.compileHelp() },
+        options: {},
+        commandString: "help"
+      }
     }
     
 
@@ -348,9 +355,23 @@ export class CommandRegistryService {
     // build positional arguments
     finalArguments["options"] = finalOptions;
 
+
+    return {
+      commandObject: commandObject,
+      finalArguments: finalArguments || {},
+      options: finalOptions,
+      commandString: commandString
+    }
+
+
+  }
+
+  public executeCommand(fullCommandLineString){
+    let parseResult: ParseResult = this.parseCommand(fullCommandLineString);
+
     return new Promise((resolve, reject) => {
 
-      let result = commandObject.callback(finalArguments || {}, commandString, resolve, reject);
+      let result = parseResult.commandObject.callback(parseResult.finalArguments, parseResult.commandString, resolve, reject);
       // resolve(result);
     })
 
@@ -604,4 +625,14 @@ export class Option {
       this.short = flag;
     }
   }
+}
+
+
+
+interface ParseResult{
+  commandObject: any;
+  finalArguments: any;
+  commandString : string;
+  options: any;
+
 }

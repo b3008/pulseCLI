@@ -88,5 +88,34 @@ fdescribe('CommandRegistryService', () => {
 
     const option = new Option(flags, description);
     expect(option).toBeTruthy();
-  })
+  });
+
+  it("should create OpCommand", ()=>{
+    let commandString = "command";
+    let description = "is a command instance"
+
+    const opCommand = new OpCommand(commandString, description);
+    expect(opCommand).toBeTruthy();
+  });
+
+
+  it("should register a command", ()=>{
+    const service: CommandRegistryService = TestBed.get(CommandRegistryService);
+
+    service.command("myCommand", "a test command which when executed will pass the test", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      console.log(args);
+      expect(commandString).toEqual("myCommand -w yo")
+      let options = Object.keys(args.options);
+      console.log("options:", options);
+      expect(options[0]).toEqual("withoption");
+      resolve();
+    })
+    service.executeCommand("myCommand -w yo");
+  });
+
+
+
+
 });
