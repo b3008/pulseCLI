@@ -212,7 +212,7 @@ export class PulseCLIComponent implements OnInit {
       this.clearActiveCommandLine()
     })
 
-    this.commandRegistry.command("help", "this help text", "help")
+    this.commandRegistry.addCommand("help", "this help text", "help")
     .action((args, commandString, resolve, reject) => {
       let cmdContainer = this.insertComponent(null, 'help').cmdContainer;
 
@@ -223,7 +223,7 @@ export class PulseCLIComponent implements OnInit {
       resolve(this);
     })
 
-      //   this.commandRegistry.command('what now', "recommendations on how to interact with the system", "UI")
+      //   this.commandRegistry.addCommand('what now', "recommendations on how to interact with the system", "UI")
       // .action((args, commandString, resolve, reject) => {
       //   let components = this.insertComponent(WhatnowComponent, commandString);
       //   let whatNowComponent = components.component;
@@ -231,7 +231,7 @@ export class PulseCLIComponent implements OnInit {
       //   this.clearActiveCommandLine();
       // })
 
-    this.commandRegistry.command('panel <number>', "make numbered panel active or add new panel to screen", "UI")
+    this.commandRegistry.addCommand('panel <number>', "make numbered panel active or add new panel to screen", "UI")
       .action((args, commandString, resolve, reject) => {
         this.clearActiveCommandLine()
         if (!args.number) {
@@ -246,7 +246,7 @@ export class PulseCLIComponent implements OnInit {
 
       });
 
-    this.commandRegistry.command('move card <panel1_card1> <panel2>', "move card to different panel", "UI")
+    this.commandRegistry.addCommand('move card <panel1_card1> <panel2>', "move card to different panel", "UI")
       .action((args, commandString, resolve, reject) => {
 
         this.clearActiveCommandLine()
@@ -264,7 +264,7 @@ export class PulseCLIComponent implements OnInit {
 
       });
 
-    this.commandRegistry.command('destroy card <panel_card>', "remove card", "UI")
+    this.commandRegistry.addCommand('destroy card <panel_card>', "remove card", "UI")
       .action((args, commandString, resolve, reject) => {
 
         this.clearActiveCommandLine()
@@ -281,7 +281,7 @@ export class PulseCLIComponent implements OnInit {
 
       });
 
-    this.commandRegistry.command('remove panel', "move card to different panel", "UI")
+    this.commandRegistry.addCommand('remove panel', "move card to different panel", "UI")
       .action((args, commandString, resolve, reject) => {
 
         this.clearActiveCommandLine()
@@ -299,7 +299,7 @@ export class PulseCLIComponent implements OnInit {
 
       });
 
-    this.commandRegistry.command('batch', "execute a batch of commands", "UI")
+    this.commandRegistry.addCommand('batch', "execute a batch of commands", "UI")
       .option('-c, --command', 'command to run')
       .action((args, commandString, resolve, reject) => {
 
@@ -319,7 +319,7 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-    this.commandRegistry.command('startwith <command>', 'add command to a list of commands executed at startup', "UI")
+    this.commandRegistry.addCommand('startwith <command>', 'add command to a list of commands executed at startup', "UI")
       .action((args, commandString, resolve, reject) => {
 
         this.clearActiveCommandLine()
@@ -333,7 +333,7 @@ export class PulseCLIComponent implements OnInit {
 
     
       // TODO:
-    // this.commandRegistry.command("ui viewer", "display help for items when the mouse is over them", "UI")
+    // this.commandRegistry.addCommand("ui viewer", "display help for items when the mouse is over them", "UI")
     // .action((args, commandString, resolve, reject) => {
 
 
@@ -354,14 +354,14 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-    // this.commandRegistry.command("echo <text>", "print html into the output", "unlisted")
+    // this.commandRegistry.addCommand("echo <text>", "print html into the output", "unlisted")
     //   .action((args, commandString, resolve, reject) => {
     //     this.echo(args.text)
     //     this.clearActiveCommandLine()
     //     resolve(this);
     //   })
 
-    // this.commandRegistry.command("list participants", "get a list of participants", "participants")
+    // this.commandRegistry.addCommand("list participants", "get a list of participants", "participants")
     //   .remote()
     //   .action((args, commandString, resolve, reject) => {
     //     let cmdContainer = this.insertComponent(ParticipantList2Component, commandString).cmdContainer;
@@ -372,7 +372,7 @@ export class PulseCLIComponent implements OnInit {
     //     resolve(this);
     //   })
 
-    // this.commandRegistry.command("create participant <email> <password>", "create a participant with an email and a password", "participants")
+    // this.commandRegistry.addCommand("create participant <email> <password>", "create a participant with an email and a password", "participants")
     //   .remote()
     //   .action((args, commandString, resolve, reject) => {
 
@@ -431,7 +431,7 @@ export class PulseCLIComponent implements OnInit {
     //     }
     //   })
 
-    // this.commandRegistry.command("open participant <email>", "show details of paricipant", "participants")
+    // this.commandRegistry.addCommand("open participant <email>", "show details of paricipant", "participants")
     //   .action((args, commandString, resolve, reject) => {
 
     //     this.participantSource.fetchSingle({ email: args.email }).then((result: any) => {
@@ -451,7 +451,7 @@ export class PulseCLIComponent implements OnInit {
 
     //   });
 
-    // this.commandRegistry.command("remove participants", "removes participants from listings.", "participants")
+    // this.commandRegistry.addCommand("remove participants", "removes participants from listings.", "participants")
     //   .option('-p, --participants [participants]', "a set of participants to delete, wrapped in quotes. e.g. 'p1,p2,p3'")
     //   .option('-y, --yes', "don't ask for confirmation")
     //   .action((args, commandString, resolve, reject) => {
@@ -476,7 +476,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command('usageStatistics <participant>', 'show usage statistics for participant', 'participants')
+    // this.commandRegistry.addCommand('usageStatistics <participant>', 'show usage statistics for participant', 'participants')
     //   .option('-s, --start [startDateTime]', "start date for data set")
     //   .option('-e, --end [endDateTime]', "end date for data set")
     //   .action((args, commandString, resolve, reject) => {
@@ -495,7 +495,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command("list groups", "get a list of groups", "groups")
+    // this.commandRegistry.addCommand("list groups", "get a list of groups", "groups")
     //   .remote()
     //   .action((args, commandString, resolve, reject) => {
 
@@ -507,7 +507,7 @@ export class PulseCLIComponent implements OnInit {
 
     //   })
 
-    // this.commandRegistry.command("delete groups", "delete groups from database", "groups")
+    // this.commandRegistry.addCommand("delete groups", "delete groups from database", "groups")
     //   .option('-g, --groups [groups]', "group to delete")
     //   .option('-y, --yes', "don't ask for confirmation")
     //   .action((args, commandString, resolve, reject) => {
@@ -529,7 +529,7 @@ export class PulseCLIComponent implements OnInit {
     //     this.clearActiveCommandLine()
     //   })
 
-    // this.commandRegistry.command("create group <name>", "create a group", "groups")
+    // this.commandRegistry.addCommand("create group <name>", "create a group", "groups")
     //   .option('-p, --participants [participants]', "a set of participants to include in the group, wrapped in quotes. e.g. 'p1,p2,p3'")
     //   .option('-n, --name <name>', 'the group\'s name')
     //   .remote()
@@ -593,7 +593,7 @@ export class PulseCLIComponent implements OnInit {
 
     //   })
 
-    // this.commandRegistry.command("open group <name>", "edit a group", "groups")
+    // this.commandRegistry.addCommand("open group <name>", "edit a group", "groups")
     //   .action((args, commandString, resolve, reject) => {
 
     //     if (!this.groupSource.itemsByIndex[args.name]) {
@@ -621,7 +621,7 @@ export class PulseCLIComponent implements OnInit {
 
     //   });
 
-    // this.commandRegistry.command('group participants', 'assign multiple participants to a group', "groups")
+    // this.commandRegistry.addCommand('group participants', 'assign multiple participants to a group', "groups")
     //   .option('-g, --group <group>', 'existing or new group to place participant(s) in')
     //   .option('-p, --participant <participant>', 'participant(s) to place in group')
     //   .action((args, commandString, resolve, reject) => {
@@ -672,7 +672,7 @@ export class PulseCLIComponent implements OnInit {
 
     //   })
 
-    // this.commandRegistry.command("list documents", "get a list of documents", "documents")
+    // this.commandRegistry.addCommand("list documents", "get a list of documents", "documents")
     //   .action((args, commandString, resolve, reject) => {
     //     let components = this.insertComponent(DocumentList2Component, commandString);
     //     components.cmdContainer.commandString = commandString;
@@ -680,7 +680,7 @@ export class PulseCLIComponent implements OnInit {
     //     resolve(this);
     //   })
 
-    // this.commandRegistry.command("create document <name>", 'open up an editor for document creation', "documents")
+    // this.commandRegistry.addCommand("create document <name>", 'open up an editor for document creation', "documents")
     //   .action((args, commandString, resolve, reject) => {
 
     //     let containerAndComponentPair = this.insertComponent(DocumentEditorComponent, commandString);
@@ -693,7 +693,7 @@ export class PulseCLIComponent implements OnInit {
     //     resolve(this);
     //   });
 
-    // this.commandRegistry.command("open document <name>", 'open up an editor for document creation', "documents")
+    // this.commandRegistry.addCommand("open document <name>", 'open up an editor for document creation', "documents")
     //   .action((args, commandString, resolve, reject) => {
         
 
@@ -724,7 +724,7 @@ export class PulseCLIComponent implements OnInit {
     //     });
     //   })
 
-    // this.commandRegistry.command("preview document <name>", 'preview a document', "documents")
+    // this.commandRegistry.addCommand("preview document <name>", 'preview a document', "documents")
     //   .option('-u, --uuid <uuid>', 'uuid for document editor reference')
     //   .action((args, commandString, resolve, reject) => {
         
@@ -772,7 +772,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command("import document", "import a document into the database", "documents")
+    // this.commandRegistry.addCommand("import document", "import a document into the database", "documents")
     //   .option('-n, --name <name>', 'name for the document')
     //   .option("-s, --string <string>", "the document content provided as a string")
     //   .option("-d, --description_short", "short description")
@@ -831,7 +831,7 @@ export class PulseCLIComponent implements OnInit {
     //     });
 
 
-    // this.commandRegistry.command("delete documents", "delete documents from database", "documents")
+    // this.commandRegistry.addCommand("delete documents", "delete documents from database", "documents")
     //   .option('-d, --documents [documents]', "documents to delete")
     //   .option('-y, --yes', "don't ask for confirmation")
     //   .action((args, commandString, resolve, reject) => {
@@ -870,7 +870,7 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-    // this.commandRegistry.command('editor', 'bring up editor JS', 'documents')
+    // this.commandRegistry.addCommand('editor', 'bring up editor JS', 'documents')
     //   .action((args, commandString, resolve, reject) => {
     //     this.clearActiveCommandLine();
     //     let components = this.insertComponent(EditorComponent, commandString);
@@ -881,7 +881,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command("create rule <name>", 'create a new  rule', "allocation rules")
+    // this.commandRegistry.addCommand("create rule <name>", 'create a new  rule', "allocation rules")
     //   .option('-r, --rule <rule>', 'json for rule content')
     //   .option('-t, --type <type>', 'type of rule')
     //   .action((args, commandString, resolve, reject) => {
@@ -941,7 +941,7 @@ export class PulseCLIComponent implements OnInit {
     //     }
     //   });
 
-    // this.commandRegistry.command("list rules", "get a list of rules", "allocation rules")
+    // this.commandRegistry.addCommand("list rules", "get a list of rules", "allocation rules")
     //   .remote()
     //   .action((args, commandString, resolve, reject) => {
     //     let components = this.insertComponent(RuleList2Component, commandString);
@@ -952,7 +952,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command("open rule <name>", "edit the configuration of an allocation rule", "allocation rules")
+    // this.commandRegistry.addCommand("open rule <name>", "edit the configuration of an allocation rule", "allocation rules")
     //   .action((args, commandString, resolve, reject) => {
 
 
@@ -1008,7 +1008,7 @@ export class PulseCLIComponent implements OnInit {
     //   });
 
 
-    // this.commandRegistry.command("delete rule <name>", "delete one or more rules", "allocation rules")
+    // this.commandRegistry.addCommand("delete rule <name>", "delete one or more rules", "allocation rules")
     //   .option('-r, --rule <rulename>', "name of rule to be deleted")
     //   .action((args, commandString, resolve, reject) => {
 
@@ -1039,7 +1039,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command("list allocations", "get a list of allocations", "allocation rules")
+    // this.commandRegistry.addCommand("list allocations", "get a list of allocations", "allocation rules")
     //   .remote()
     //   .action((args, commandString, resolve, reject) => {
     //     let components = this.insertComponent(AllocationList2Component, commandString);
@@ -1050,7 +1050,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command("create allocation <allocationName>", 'pair a participant or group with a document via a rule', "allocation rules")
+    // this.commandRegistry.addCommand("create allocation <allocationName>", 'pair a participant or group with a document via a rule', "allocation rules")
     //   .option('-p, --participant <participant>', 'participant to apply the rule to')
     //   .option('-g, --group <group>', 'group to apply the rule to')
     //   .option('-d, --document <document>', 'document to apply the rule to')
@@ -1082,7 +1082,7 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-    // this.commandRegistry.command("open allocation <name>", "edit the configuration of an allocation rule", "allocation rules")
+    // this.commandRegistry.addCommand("open allocation <name>", "edit the configuration of an allocation rule", "allocation rules")
     //   .action((args, commandString, resolve, reject) => {
 
 
@@ -1137,7 +1137,7 @@ export class PulseCLIComponent implements OnInit {
 
     //   });
 
-    // this.commandRegistry.command('send cloudmessage', "send a cloudmessage", "cloudmessages")
+    // this.commandRegistry.addCommand('send cloudmessage', "send a cloudmessage", "cloudmessages")
     //   .option('-i, --id <messageid>', 'when multiple participants are specified for the same message, the messageid is an indicator that all sent messages are of the same content. When a messageid is not provided, a messageid is generated.')
     //   .option('-t, --type <messagetype>', 'type of message, notification or data. Default is notification. WebApps can only receive \'data\' when running in the background, in order to display notifications')
     //   .option('-o, --origin <origin>', 'indicate where the message originated from')
@@ -1262,7 +1262,7 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-    // this.commandRegistry.command('list cloudmessages', "get a list of cloudmessages that have been issued", "cloudmessages")
+    // this.commandRegistry.addCommand('list cloudmessages', "get a list of cloudmessages that have been issued", "cloudmessages")
     //   // TODO:
     //   // .option('-g, --grouped', 'view cloudmessages of the same messageid grouped into one row')
     //   // .option('-e, --expanded', 'view every cloudmessage as an individual row')
@@ -1274,7 +1274,7 @@ export class PulseCLIComponent implements OnInit {
     //     resolve(this);
     //   })
 
-    // this.commandRegistry.command('open cloudmessage <messageid>', "bring up the details of a specific cloudmesage", "cloudmessages")
+    // this.commandRegistry.addCommand('open cloudmessage <messageid>', "bring up the details of a specific cloudmesage", "cloudmessages")
     //   // TODO:
     //   // .option('-g, --grouped', 'view cloudmessages of the same messageid grouped into one row')
     //   // .option('-e, --expanded', 'view every cloudmessage as an individual row')
@@ -1306,7 +1306,7 @@ export class PulseCLIComponent implements OnInit {
 
     //   })
 
-    // this.commandRegistry.command('cloudmessage report <messageid>', "see how the cloudmessage was delivered", "cloudmessages")
+    // this.commandRegistry.addCommand('cloudmessage report <messageid>', "see how the cloudmessage was delivered", "cloudmessages")
     //   .action((args, commandString, resolve, reject) => {
     //     if (args.messageid) {
     //       this.cloudmessageSource.fetchReport({ messageid: args.messageid }).then(result => {
@@ -1324,7 +1324,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command('researcherinfo', "show information about this account", "researcher")
+    // this.commandRegistry.addCommand('researcherinfo', "show information about this account", "researcher")
     //   .action((args, commandString, resolve, reject) => {
     //     this.storage.get("userLoggedIn").then(result => {
     //       let components = this.insertComponent(ResearcherInfoComponent, commandString);
@@ -1336,7 +1336,7 @@ export class PulseCLIComponent implements OnInit {
     //     });
     //   })
 
-    // this.commandRegistry.command('myIdentifier', "print this researcher's identifier string", "researcher")
+    // this.commandRegistry.addCommand('myIdentifier', "print this researcher's identifier string", "researcher")
     //   .action((args, commandString, resolve, reject) => {
     //     this.storage.get("userLoggedIn").then(result => {
     //       this.echo(this.yellow(result.identifier));
@@ -1347,7 +1347,7 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-    // this.commandRegistry.command('configure mailserver', "allow sending emails from your smtp account", "researcher")
+    // this.commandRegistry.addCommand('configure mailserver', "allow sending emails from your smtp account", "researcher")
     //   .action((args, commandString, resolve, reject) => {
     //     // this.storage.get("userLoggedIn").then(result=>{
     //     //   this.echo(this.yellow(result.identifier));
@@ -1358,7 +1358,7 @@ export class PulseCLIComponent implements OnInit {
     //     resolve(this);
     //   })
 
-    // this.commandRegistry.command('notifications', "show list of incoming notifications from the server", "researcher")
+    // this.commandRegistry.addCommand('notifications', "show list of incoming notifications from the server", "researcher")
     //   .action((args, commandString, resolve, reject) => {
     //     let components = this.insertComponent(SocketEventReceiverComponent, commandString);
     //     components.cmdContainer.commandString = commandString;
@@ -1367,7 +1367,7 @@ export class PulseCLIComponent implements OnInit {
 
     //   })
 
-    // this.commandRegistry.command('report <message>', "send a message to the developer", "researcher")
+    // this.commandRegistry.addCommand('report <message>', "send a message to the developer", "researcher")
     //   .option('-t, --type', 'indicate severity/nature of report')
     //   .action((args, commandString, resolve, reject) => {
 
@@ -1385,7 +1385,7 @@ export class PulseCLIComponent implements OnInit {
     //   })
 
 
-    // this.commandRegistry.command("test", "conduct a functionality test with a participant or a group", "researcher")
+    // this.commandRegistry.addCommand("test", "conduct a functionality test with a participant or a group", "researcher")
     //   .option('-p, --participant <participant>', "which participant to do it for")
     //   .option('-g, --group <group>', 'which group to do it for')
     //   .action((args, commandString, resolve, reject) => {
@@ -1453,7 +1453,7 @@ export class PulseCLIComponent implements OnInit {
 
 
 
-    // this.commandRegistry.command('logout', "log out of this session", "researcher")
+    // this.commandRegistry.addCommand('logout', "log out of this session", "researcher")
     //   .action((args, commandString) => {
 
     //     this.storage.set('jwt', null).then(() => {

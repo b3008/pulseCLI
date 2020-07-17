@@ -3,14 +3,18 @@ import { HttpClientModule} from '@angular/common/http';
 import { CommandRegistryService } from './command-registry.service';
 import { Option } from './command-registry.service';
 import { OpCommand } from './command-registry.service';
-
+import { resolve } from 'path';
+import { PipesModule } from './../pipes.module';
+import { SafeHtmlPipe } from './../safe-html';
+import { HelpItemComponent} from './../components/help-item/help-item.component';
 declare var localStorage;
 
 
 
 fdescribe('CommandRegistryService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    imports:[HttpClientModule]
+    imports:[HttpClientModule, PipesModule],
+    declarations:[HelpItemComponent, SafeHtmlPipe]
   }));
 
   it('should be created', () => {
@@ -33,7 +37,7 @@ fdescribe('CommandRegistryService', () => {
     }
   });
 
-  it('should allow no more than 100 commands in commandHistroy', ()=>{
+  it('should allow no more than 100 commands in commandHistory', ()=>{
     if(localStorage.history)   delete localStorage.history;
     const service: CommandRegistryService = TestBed.get(CommandRegistryService);
 
@@ -99,10 +103,10 @@ fdescribe('CommandRegistryService', () => {
   });
 
 
-  it("should register a command", ()=>{
+  it("should register and execute a command", ()=>{
     const service: CommandRegistryService = TestBed.get(CommandRegistryService);
 
-    service.command("myCommand", "a test command which when executed will pass the test", "nocategory")
+    service.addCommand("myCommand", "a test command which when executed will pass the test", "nocategory")
     .option("-w, --withoption", "an option for the command")
     .action((args, commandString, resolve, reject)=>{
       console.log(args);
@@ -116,6 +120,35 @@ fdescribe('CommandRegistryService', () => {
   });
 
 
+  it("should call default callback when command does not exist", ()=>{
+    const service: CommandRegistryService = TestBed.get(CommandRegistryService);
 
+    service.registerCallbackForWhenCommmandDoesNotExist((commandString)=>{
+      console.log(commandString);
+      expect(commandString).toEqual("randomCommand");
+      resolve();
+      
+    })
+    
+    service.executeCommand("randomCommand");
+  });
+
+  it("should compile help", ()=>{
+    const service: CommandRegistryService = TestBed.get(CommandRegistryService);
+
+    service.addCommand("myCommand", "a test command which when executed will pass the test", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      console.log(args);
+      expect(commandString).toEqual("myCommand -w yo")
+      let options = Object.keys(args.options);
+      console.log("options:", options);
+      expect(options[0]).toEqual("withoption");
+      resolve();
+    })
+    service.compileHelp();
+    console.log(service.categories)
+    expect(service.categories[0]).toEqual("nocategory")
+  });
 
 });
