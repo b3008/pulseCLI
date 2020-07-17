@@ -1530,7 +1530,7 @@ export class PulseCLIComponent implements OnInit {
   }
 
   createdComponentsCounter = 0;
-  private insertComponent(component?, commandString?): InsertComponentResult {
+  public insertComponent(component?, commandString?): InsertComponentResult {
     //  create a container for the component that presents it as the ouput of a command
     let commandOutputComponentRef = this.componentFactoryResolver.resolveComponentFactory(CommandOutputComponent).create(this.injector);
     let c = commandOutputComponentRef.instance.element.nativeElement
@@ -2086,8 +2086,8 @@ export class PulseCLIComponent implements OnInit {
 
     event.stopPropagation();
     this.activeTab = activeIndex;
-    let resultPromise: any = this.commandRegistry.parseCommand(event.detail.command, { enterIntoHistory: event.detail.enterIntoHistory, args: event.detail.args });
-
+    // let resultPromise: any = this.commandRegistry.parseCommand(event.detail.command, { enterIntoHistory: event.detail.enterIntoHistory, args: event.detail.args });
+    let resultPromise = this.commandRegistry.executeCommand(event.detail.command, { enterIntoHistory: event.detail.enterIntoHistory, args: event.detail.args });
     if (resultPromise) {
       resultPromise.then((result) => {
         

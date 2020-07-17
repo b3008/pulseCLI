@@ -3,11 +3,11 @@
 
   <div id="menubar-vertical">
 
-    <button (click)='commandRegistry.parseCommand("help");'>
+    <button (click)='commandRegistry.executeCommand("help");'>
       help
     </button>
 
-    <button (click)='commandRegistry.parseCommand("panel")'>
+    <button (click)='commandRegistry.executeCommand("panel")'>
       add panel
     </button>
   </div>

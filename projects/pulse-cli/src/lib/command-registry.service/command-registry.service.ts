@@ -370,8 +370,8 @@ export class CommandRegistryService {
     }
   }
 
-  public executeCommand(fullCommandLineString) {
-    let parseResult: ParseResult = this.parseCommand(fullCommandLineString);
+  public executeCommand(fullCommandLineString, indirectParams?:any) {
+    let parseResult: ParseResult = this.parseCommand(fullCommandLineString, indirectParams);
 
     return new Promise((resolve, reject) => {
 

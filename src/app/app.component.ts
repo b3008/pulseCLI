@@ -1,6 +1,9 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 
 import { PulseCLIComponent, PulseCLIService} from '../../projects/pulse-cli/src/public-api';
+
+import {AboutComponent } from './about/about.component';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,7 +18,8 @@ export class AppComponent implements OnInit{
       this.pulse.commandRegistry.addCommand("about", "about this probject", "")
       .action((args, commandString,resolve, reject)=>{
           //insert a markdown container
-          
+          this.pulse.insertComponent(AboutComponent, "about");
+          resolve(this);
       })
   }
 }
