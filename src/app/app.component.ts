@@ -17,7 +17,7 @@ export class AppComponent implements OnInit{
   ngOnInit(){
       this.pulse.commandRegistry.addCommand("about", "about this probject", "")
       .action((args, commandString,resolve, reject)=>{
-          //insert a markdown container
+          //insert a component
           this.pulse.insertComponent(AboutComponent, "about");
           resolve(this);
       })

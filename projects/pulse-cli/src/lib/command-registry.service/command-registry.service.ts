@@ -43,7 +43,7 @@ export class CommandRegistryService {
   }
 
 
-  public addToHistory(commandString) {
+  public addToHistory(commandString:string) {
     this.commandHistory.push(commandString);
     if (this.commandHistory.length > 100) {
       this.commandHistory.shift();
@@ -64,8 +64,12 @@ export class CommandRegistryService {
 
   public getAtStepsFromHistoryIndex(steps) {
     this.commandHistoryIndex += steps;
-    if (this.commandHistoryIndex < 0) this.commandHistoryIndex = 0;
-    if (this.commandHistoryIndex > this.commandHistory.length - 1) this.commandHistoryIndex = this.commandHistory.length - 1;
+    if (this.commandHistoryIndex < 0) {
+      this.commandHistoryIndex = 0;
+    } else if (this.commandHistoryIndex > this.commandHistory.length - 1) 
+    {
+      this.commandHistoryIndex = this.commandHistory.length - 1;
+    }
     return this.commandHistory[this.commandHistoryIndex];
   }
 
@@ -83,16 +87,16 @@ export class CommandRegistryService {
     // })
   }
 
-  public executeStartupCommands() {
-    // this.storage.get('startupCommands').then(
-    //   async (startupCommands) => {
-    //   if (!startupCommands) return;
-    //   let promise: any = Promise.resolve();
-    //   for (let i = 0; i < startupCommands.length; i++) {
-    //     await this.parseCommand(startupCommands[i]);    
-    //   }
-    // })
-  }
+  // public executeStartupCommands() {
+  //   // this.storage.get('startupCommands').then(
+  //   //   async (startupCommands) => {
+  //   //   if (!startupCommands) return;
+  //   //   let promise: any = Promise.resolve();
+  //   //   for (let i = 0; i < startupCommands.length; i++) {
+  //   //     await this.parseCommand(startupCommands[i]);    
+  //   //   }
+  //   // })
+  // }
 
 
 
@@ -113,36 +117,43 @@ export class CommandRegistryService {
     return cmd;
   }
 
-  isOption(string) {
-    if (string.indexOf('-') == 0) return true;
-  }
+  // isOption(string) {
+  //   if (string.indexOf('-') == 0) return true;
+  // }
 
-  isLongOption(string) {
-    if (string.indexOf('--') == 0) return true;
-  }
+  // isLongOption(string) {
+  //   if (string.indexOf('--') == 0) return true;
+  // }
 
-  isSwitch(bstring, index) {
-    if (!this.isOption(bstring[index])) return false;
-    else {
-      if (!bstring[index + 1]) { }
-    }
+  // isSwitch(bstring, index) {
+  //   if (!this.isOption(bstring[index])) return false;
+  //   else {
+  //     if (!bstring[index + 1]) { }
+  //   }
 
-  }
+  // }
 
 
   public findCommandObject(commandNameContainer) {
+
+    /*
+      the purpose here is to match against a set of candidate commands, not just find a single one command
+
+    */
     //assuming that commandNameContainer is stripped of options
+    
     let commandNamesList = Object.keys(this.commands).sort((a, b) => {
       if (a < b) { return -1; }
       if (a > b) { return 1; }
       return 0;
     });
-
+   
     let commandObject = null;
     let args = [];
     let remainingCommandsList = commandNamesList;
     let existingCommandCandidate;
     let i = 1;
+
     while (commandNameContainer[i]) {
       existingCommandCandidate = commandNameContainer.substr(0, i)
       remainingCommandsList = remainingCommandsList.filter(cmd => {
@@ -150,14 +161,22 @@ export class CommandRegistryService {
           return cmd;
         }
       })
+
       if (remainingCommandsList.length == 1) {
         break;
       } else {
         i++;
+        if(!commandNameContainer[i]){
+          //we are out of characters for candidate command, should reject all commands with higher character count
+          existingCommandCandidate = commandNameContainer.substr(0, i)
+        }
       }
+
+
     }
 
     if (remainingCommandsList.length == 1) {
+      
 
       let restOfContents = commandNameContainer.substr(remainingCommandsList[0].length + 1).trim().split(" ");
       args = restOfContents.filter((item) => {
@@ -166,11 +185,23 @@ export class CommandRegistryService {
       commandObject = this.commands[remainingCommandsList[0]];
       return [commandObject, args];
     } else if (remainingCommandsList.length == 0) {
+      
       return [null, null];
     } else if (remainingCommandsList.length > 1) {
 
-      debugger;
-      return [null, null];
+      //multiple candidates found, return the one that matches existingCommandCandidate
+      remainingCommandsList = remainingCommandsList.filter(cmd => {
+        if (cmd == existingCommandCandidate) {
+          return cmd;
+        }
+      })
+      
+      let restOfContents = commandNameContainer.substr(remainingCommandsList[0].length + 1).trim().split(" ");
+      args = restOfContents.filter((item) => {
+        return item !== "";
+      })
+      commandObject = this.commands[remainingCommandsList[0]];
+      return [commandObject, args];
     }
 
 
@@ -197,16 +228,11 @@ export class CommandRegistryService {
 
   public parseCommand(commandString, indirectParams?): ParseResult {
 
-    // this.api.saveCommandHistory(commandString, indirectParams || {}, {}, true);
     if (indirectParams) if (indirectParams.enterIntoHistory) {
       this.addToHistory(commandString);
     }
 
     if ((commandString === "help") || (commandString === "?")) {
-      // return new Promise((resolve, reject) => {
-      //   this.commands["help"].callback({ helpItems: this.compileHelp() }, "help", resolve, reject)
-      // })
-
       return {
         commandObject: this.commands["help"],
         finalArguments: { helpItems: this.compileHelp() },
@@ -232,15 +258,17 @@ export class CommandRegistryService {
 
 
 
-
     //assuming there are no switches, cmdContainer contains commandName + positional arguments
     let cmdContainer = cmdString;
     //but if there are switches, isolate them
     if (cmdString.indexOf('-') != -1) {
       cmdContainer = cmdString.substr(0, cmdString.indexOf('-')).trim();
     }
-
+    
     let [commandObject, args] = this.findCommandObject(cmdContainer);
+
+    
+
 
     if (!commandObject) {
       // this.doesNotExistCallback({ commandName: cmdContainer });
@@ -360,8 +388,6 @@ export class CommandRegistryService {
 
     // build positional arguments
     finalArguments["options"] = finalOptions;
-
-
     return {
       commandObject: commandObject,
       finalArguments: finalArguments || {},
@@ -371,6 +397,8 @@ export class CommandRegistryService {
   }
 
   public executeCommand(fullCommandLineString, indirectParams?:any) {
+
+    
     let parseResult: ParseResult = this.parseCommand(fullCommandLineString, indirectParams);
 
     return new Promise((resolve, reject) => {
@@ -420,9 +448,6 @@ export class CommandRegistryService {
 
 
       for (let i = 0; i < commandsInCategory.length; i++) {
-
-        // for(let i=0; i<commandNamesList.length; i++){
-        // let cmd = commandsInCategoryNamesList[i]; 
 
         let cmdObject = commandsInCategory[i];
 

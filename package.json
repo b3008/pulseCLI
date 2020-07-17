@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "rm -rf docs/ && ng build --prod --output-path=\"docs\" --base-href=\"/pulseCLI/\""
+    "deploy": "rm -rf docs/ && ng build --prod --output-path=\"docs\" --base-href=\"/pulseCLI/\"",
+    "coverage": "cd coverage && bash <(curl -s https://codecov.io/bash) -t f273454a-fc1b-4060-8b8d-5db2f9d7f47c"
   },
   "private": true,
   "dependencies": {

@@ -82,9 +82,27 @@ fdescribe('CommandRegistryService', () => {
     expect(command97f).toEqual("testCommand_197");
     expect(command98f).toEqual("testCommand_198");
     expect(command99f).toEqual("testCommand_199");
-
   });
 
+  it('should return commandHistory[0] when commandHistoryIndex<0 at getAtStepsFromHistoryIndex', ()=>{
+    if(localStorage.history)   delete localStorage.history;
+    const service: CommandRegistryService = TestBed.get(CommandRegistryService);
+    service.addToHistory("command1");
+    service.addToHistory("command2");
+    expect(service.commandHistoryIndex).toEqual(1);
+    let pastCommand = service.getAtStepsFromHistoryIndex(-10);
+    expect(pastCommand).toEqual("command1");
+  })
+
+  it('should return latest when commandHistoryIndex>commandHistrory.length, at getAtStepsFromHistoryIndex', ()=>{
+    if(localStorage.history)   delete localStorage.history;
+    const service: CommandRegistryService = TestBed.get(CommandRegistryService);
+    service.addToHistory("command1");
+    service.addToHistory("command2");
+    expect(service.commandHistoryIndex).toEqual(1);
+    let pastCommand = service.getAtStepsFromHistoryIndex(10);
+    expect(pastCommand).toEqual("command2");
+  })
 
   it("should create option", ()=>{
     let flags = '-n, --new';
@@ -103,8 +121,76 @@ fdescribe('CommandRegistryService', () => {
   });
 
 
+  it("should register and parse a command", ()=>{
+    const service: CommandRegistryService = TestBed.get(CommandRegistryService);
+
+
+    service.addCommand("bCommand0", "if this was executed it means there was an error", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      //faiil. this should not be executed
+      expect(false).toBeTruthy();
+    })
+
+    service.addCommand("aCommand1", "if this was executed it means there was an error", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      //faiil. this should not be executed
+      expect(false).toBeTruthy();
+    })
+
+    service.addCommand("myCommand2", "if this was executed it means there was an error", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      //faiil. this should not be executed
+      expect(false).toBeTruthy();
+
+    })
+
+    service.addCommand("myCommand", "a test command which when executed will pass the test", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      console.log(args);
+      expect(commandString).toEqual("myCommand -w yo")
+      let options = Object.keys(args.options);
+      console.log("options:", options);
+      expect(options[0]).toEqual("withoption");
+      resolve();
+    })
+    
+
+    let parseResult = service.parseCommand("myCommand -w yo");
+    expect(parseResult.commandObject).toBeTruthy();
+    expect(parseResult.commandObject.name).toEqual("myCommand");
+
+  });
+
+
   it("should register and execute a command", ()=>{
     const service: CommandRegistryService = TestBed.get(CommandRegistryService);
+
+
+    service.addCommand("bCommand0", "if this was executed it means there was an error", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      //faiil. this should not be executed
+      expect(false).toBeTruthy();
+    })
+
+    service.addCommand("aCommand1", "if this was executed it means there was an error", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      //faiil. this should not be executed
+      expect(false).toBeTruthy();
+    })
+
+    service.addCommand("myCommand2", "if this was executed it means there was an error", "nocategory")
+    .option("-w, --withoption", "an option for the command")
+    .action((args, commandString, resolve, reject)=>{
+      //faiil. this should not be executed
+      expect(false).toBeTruthy();
+
+    })
 
     service.addCommand("myCommand", "a test command which when executed will pass the test", "nocategory")
     .option("-w, --withoption", "an option for the command")
@@ -147,8 +233,21 @@ fdescribe('CommandRegistryService', () => {
       resolve();
     })
     service.compileHelp();
-    console.log(service.categories)
-    expect(service.categories[0]).toEqual("nocategory")
+    console.log("categories:", service.categories)
+    expect(Object.keys(service.categories)[0]).toEqual("nocategory")
   });
+
+
+  // it("should return true at isOption for '-myOption' and true for '--myOption", ()=>{
+  //   const service: CommandRegistryService = TestBed.get(CommandRegistryService);
+  //   expect(service.isOption("-myOption")).toEqual(true);
+  //   expect(service.isOption("-myOption")).toEqual(true);
+  // })
+
+  // it("should return true at isLongOption for '--myOption' and falsy for '-myOption", ()=>{
+  //   const service: CommandRegistryService = TestBed.get(CommandRegistryService);
+  //   expect(service.isLongOption("--myOption")).toEqual(true);
+  //   expect(service.isLongOption("-myOption")).toBeFalsy();
+  // })
 
 });
