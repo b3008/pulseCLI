@@ -2,7 +2,7 @@
 
 A powerful, terminal-inspired UI library for Angular that provides a flexible command-line interface with drag-and-drop panels for rapid prototyping and component development.
 
-[Live Demo](https://b3008.github.io/pulseCLI/)
+
 
 ## Overview
 
@@ -171,8 +171,3 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Links
-
-- [Live Demo](https://b3008.github.io/pulseCLI/)
-- [Angular Documentation](https://angular.dev)
-- [PrimeNG Documentation](https://primeng.org)
