@@ -44,19 +44,35 @@
 // $command-line-foreground: $output-header-foreground;
 
 
-$command-line-foreground : #000;
-$command-line-background : #ffff;
+// Light, modern dashboard color scheme (inspired by crypto analytics UI)
+$primary: #6366f1;           // Indigo - for accents and interactive elements
+$primary-hover: #4f46e5;     // Darker indigo for hover states
+$primary-dark-variant: #3730a3; // Even darker for active states
 
-$foreground: #000;
-$background: #fff;
+$surface-0: #f8f9fb;         // Very light gray - main background
+$surface-100: #ffffff;       // White - panels and cards
+$surface-200: #f3f4f6;       // Light gray - headers, hover states
+$surface-300: #e5e7eb;       // Medium gray - borders, separators
 
-$app-accent:blue;
-$accent: purple;
-$accent-hover: deeppurple;
-$accent-light-variant:pink;
+$foreground: #1f2937;        // Dark gray text
+$foreground-muted: #6b7280;  // Muted gray text
+$foreground-dim: #9ca3af;    // Dimmed gray text
 
-$primary-dark-variant: darkgray;
+$background: $surface-0;
+$accent: #6366f1;            // Indigo for highlights
+$accent-hover: #4f46e5;      // Darker indigo for hover
+$accent-light-variant: #818cf8;
 
-$output-header-background: darkgreen;
-$output-header-foreground: yellow;
-$output-header-border-bottom: aqua;
+$border: #e5e7eb;            // Light gray borders
+$border-highlight: #d1d5db;  // Slightly darker for emphasis
+
+// Command line specific
+$command-line-background: $surface-100;
+$command-line-foreground: $foreground;
+$command-line-prompt: $accent;
+
+// Output/Panel specific
+$output-header-background: $surface-200;
+$output-header-foreground: $foreground;
+$output-header-border-bottom: $border;
+$output-content-background: $surface-100;

@@ -1,10 +1,14 @@
 import { Component, Input , ViewChild, ElementRef, Output, EventEmitter, OnInit} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {OpCommand} from '../../command-registry.service/command-registry.service';
+import { SafeHtmlPipe } from '../../safe-html';
 
 @Component({
   selector: 'help-item',
   templateUrl: './help-item.component.html',
   styleUrls: ['./help-item.component.scss'],
+  standalone: true,
+  imports: [CommonModule, SafeHtmlPipe]
 })
 export class HelpItemComponent implements OnInit {
 

@@ -1,16 +1,27 @@
 <div id="pageContainer-across" (mouseover)="mouseover($event)" (keydown)="keydown($event)" (keyup)="keyup($event)"
   (mouseup)="panelContainerMouseUp($event)" tabindex="0">
 
-  <div id="menubar-vertical">
+  <p-toolbar id="menubar-vertical">
+    <ng-template pTemplate="start">
+      <div class="toolbar-buttons">
+        <p-button
+          label="Help"
+          icon="pi pi-question-circle"
+          (onClick)='commandRegistry.executeCommand("help");'
+          severity="secondary"
+          size="small">
+        </p-button>
 
-    <button (click)='commandRegistry.executeCommand("help");'>
-      help
-    </button>
-
-    <button (click)='commandRegistry.executeCommand("panel")'>
-      add panel
-    </button>
-  </div>
+        <p-button
+          label="Add Panel"
+          icon="pi pi-plus"
+          (onClick)='commandRegistry.executeCommand("panel")'
+          severity="secondary"
+          size="small">
+        </p-button>
+      </div>
+    </ng-template>
+  </p-toolbar>
 
   <div id="panelContainer" #panelContainer (mouseup)="panelContainerMouseUp($event)"
     (mouseup)="mouseUpWhileCommandOutputMouseDown()" (mousemove)="panelContainerMousemove($event)"

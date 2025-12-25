@@ -1,25 +1,27 @@
-@import "../../_variables.scss";
+@use "../../_variables" as *;
 
 :host {
   position: absolute;
-
   display: block;
-
   width: 100%;
   height: 100%;
-  // background-color: #3a3a3a;
-  background-color:$background;
+  background-color: $surface-100;
   overflow: hidden;
   top: 500px;
   opacity: 1;
   transition: opacity 0.3s ease, top 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  border: 1px solid $border;
+  border-radius: 8px;
+  margin: 12px;
+  z-index: 10;
 
-  box-shadow: 0px -5px 10px -2px rgba(0, 0, 0, 0.55);
-  
-  border:solid 2px #444;
-
-
-  border-radius: 3px 3px;
+  // When being dragged, ensure it's on top of everything
+  &.dragging {
+    z-index: 9999;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.08);
+    opacity: 0.98;
+  }
 }
 
 
@@ -28,54 +30,60 @@
 }
 
 .outputHeader {
-
-  height: 40px;
+  min-height: 44px;
   display: flex;
   justify-content: space-between;
-  justify-content: first-baseline;
+  align-items: center;
+  background: $surface-100;
+  padding: 12px 16px;
+  border-bottom: 1px solid $border;
+  cursor: grab;
+  transition: background 0.2s ease;
 
+  &:hover {
+    background: $surface-200;
+  }
 
-  background-color:$output-header-background;
-  padding-top: 5px;
-  padding-left: 5px;
-  padding-right:5px;
-  border-bottom:solid 1px $output-header-border-bottom;
+  &:active {
+    cursor: grabbing;
+  }
 }
 
 .commandString {
-  padding: 3px;
-  padding-bottom:0px;
-  // font-family: monospace;
+  padding: 0;
   font-family: 'IBM Plex Mono', monospace;
-  font-weight: bold;
-  font-size: 14px;
-  // font-size: 0.7em;
-  color: $output-header-foreground;
-  
-  margin: 0px auto;
+  font-weight: 600;
+  font-size: 13px;
+  color: $foreground;
+  margin: 0;
   display: block;
   width: 100%;
+  opacity: 0.9;
 }
 
 .close-button{
-  background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com --%3E%3Ctitle%3Eclose-icon%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cpath d='M9,18 C4.02943725,18 0,13.9705627 0,9 C0,4.02943725 4.02943725,0 9,0 C13.9705627,0 18,4.02943725 18,9 C18,13.9705627 13.9705627,18 9,18 Z M10.7099567,9.02970297 L13.31435,6.42530968 C13.7783393,5.96132042 13.7783393,5.2090452 13.31435,4.74505594 C12.8503607,4.28106668 12.0980855,4.28106668 11.6340963,4.74505594 L9.02970297,7.34944923 L6.42530968,4.74505594 C5.96132042,4.28106668 5.2090452,4.28106668 4.74505594,4.74505594 C4.28106668,5.2090452 4.28106668,5.96132042 4.74505594,6.42530968 L7.34944923,9.02970297 L4.74505594,11.6340963 C4.28106668,12.0980855 4.28106668,12.8503607 4.74505594,13.31435 C5.2090452,13.7783393 5.96132042,13.7783393 6.42530968,13.31435 L9.02970297,10.7099567 L11.6340963,13.31435 C12.0980855,13.7783393 12.8503607,13.7783393 13.31435,13.31435 C13.7783393,12.8503607 13.7783393,12.0980855 13.31435,11.6340963 L10.7099567,9.02970297 Z' id='Combined-Shape' fill='%23000000'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:center;
-  background-size:100%;
-  width:16px;
-  height:16px;
-}
+  background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cpath d='M9,18 C4.02943725,18 0,13.9705627 0,9 C0,4.02943725 4.02943725,0 9,0 C13.9705627,0 18,4.02943725 18,9 C18,13.9705627 13.9705627,18 9,18 Z M10.7099567,9.02970297 L13.31435,6.42530968 C13.7783393,5.96132042 13.7783393,5.2090452 13.31435,4.74505594 C12.8503607,4.28106668 12.0980855,4.28106668 11.6340963,4.74505594 L9.02970297,7.34944923 L6.42530968,4.74505594 C5.96132042,4.28106668 5.2090452,4.28106668 4.74505594,4.74505594 C4.28106668,5.2090452 4.28106668,5.96132042 4.74505594,6.42530968 L7.34944923,9.02970297 L4.74505594,11.6340963 C4.28106668,12.0980855 4.28106668,12.8503607 4.74505594,13.31435 C5.2090452,13.7783393 5.96132042,13.7783393 6.42530968,13.31435 L9.02970297,10.7099567 L11.6340963,13.31435 C12.0980855,13.7783393 12.8503607,13.7783393 13.31435,13.31435 C13.7783393,12.8503607 13.7783393,12.0980855 13.31435,11.6340963 L10.7099567,9.02970297 Z' id='Combined-Shape' fill='%239ca3af'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  width: 18px;
+  height: 18px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 
-.close-button:hover {
-  color: $accent;
+  &:hover {
+    opacity: 1;
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cpath d='M9,18 C4.02943725,18 0,13.9705627 0,9 C0,4.02943725 4.02943725,0 9,0 C13.9705627,0 18,4.02943725 18,9 C18,13.9705627 13.9705627,18 9,18 Z M10.7099567,9.02970297 L13.31435,6.42530968 C13.7783393,5.96132042 13.7783393,5.2090452 13.31435,4.74505594 C12.8503607,4.28106668 12.0980855,4.28106668 11.6340963,4.74505594 L9.02970297,7.34944923 L6.42530968,4.74505594 C5.96132042,4.28106668 5.2090452,4.28106668 4.74505594,4.74505594 C4.28106668,5.2090452 4.28106668,5.96132042 4.74505594,6.42530968 L7.34944923,9.02970297 L4.74505594,11.6340963 C4.28106668,12.0980855 4.28106668,12.8503607 4.74505594,13.31435 C5.2090452,13.7783393 5.96132042,13.7783393 6.42530968,13.31435 L9.02970297,10.7099567 L11.6340963,13.31435 C12.0980855,13.7783393 12.8503607,13.7783393 13.31435,13.31435 C13.7783393,12.8503607 13.7783393,12.0980855 13.31435,11.6340963 L10.7099567,9.02970297 Z' id='Combined-Shape' fill='%236b7280'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    transform: scale(1.05);
+  }
 }
 
 
 .outerContainer {
   z-index: 2;
   overflow: hidden;
-  
-  background-color:$background;
+  background-color: $surface-100;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -83,11 +91,30 @@
 
 .contentContainer {
   overflow-y: auto;
-  overflow-x:auto;
+  overflow-x: auto;
   height: 100%;
-  // border:solid thick yellow;
-  background:#F0F0F0;
+  background: $surface-100;
   padding: 20px;
+  color: $foreground;
+
+  // Customize scrollbar
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $surface-200;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $surface-300;
+    border-radius: 4px;
+
+    &:hover {
+      background: $border-highlight;
+    }
+  }
 }
 
 

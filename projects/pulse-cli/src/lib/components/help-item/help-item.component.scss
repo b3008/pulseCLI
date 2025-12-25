@@ -1,24 +1,24 @@
-@import '../../_variables';
+@use '../../_variables' as *;
 
 .title {
   color: $accent;
   width: 50%;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 14px;
-  transition: color 0.2s;
-  font-weight: bold;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    color: $accent-hover;
+    text-decoration: underline;
+  }
 }
-.title:hover {
-  text-decoration: underline;
-  // color: var(--color-green-high);
-  color:$accent-hover;
-}
-// .text {
-//   // color: var(--color-blue-high);
-// }
+
 .description {
-  // color: var(--color-orange);
-  color:$primary-dark-variant
+  color: $foreground-muted;
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 .expand-wrapper {
   padding: 15px;

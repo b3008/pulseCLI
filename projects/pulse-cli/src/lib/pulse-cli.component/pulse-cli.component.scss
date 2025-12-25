@@ -1,61 +1,86 @@
-@import "../_variables.scss";
+@use "../_variables" as *;
 
 
 :host {
   display: flex;
   position: absolute;
-  font-family: sans-serif;
-  border:solid;
-  left:0px;
-  bottom:0px;
-  top:0px;
-  right:0px;
-} 
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: $surface-0;
+  color: $foreground;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+}
 
 
 #pageContainer-across{
-  display:flex;
-  flex-direction:row;
-  // height:100vh;
-  align-items: stretch;
-  align-content:flex-end;
-  width:100%;
-}
-
-
-#menubar-vertical{
-  flex-grow:0;
   display: flex;
-  flex-direction: column;
-  align-items:center;
-  position: relative;
-  padding:2px;
-  border-right:solid thin gray;
+  flex-direction: row;
+  align-items: stretch;
+  align-content: flex-end;
+  width: 100%;
+  gap: 1rem;
+  padding: 1rem;
 }
 
-#menubar-vertical button {
 
-	// box-shadow:inset 0px 1px 0px 0px darkgray;
-	// background:linear-gradient(to bottom, darkgray 5%, gray 100%);
-	background-color:#EEE;
-  border:1px solid lightgray;
-  border-radius:5px;
-  display:block;
-  width:100%;
-  height:45px;
-	cursor:pointer;
-	color:#555;
-	font-family:sans-serif;
-	font-size:13px;
-	font-weight:bold;
-	padding:6px 12px;
-  text-decoration:none;
-  outline:none;
-  margin:1px;
+#menubar-vertical {
+  flex-grow: 0;
+  background: $surface-100;
+  border: 1px solid $border;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
 }
 
-#menubar-vertical button:hover {
-	background-color:#FFF;
+#menubar-vertical ::ng-deep {
+  // Make toolbar vertical
+  .p-toolbar {
+    flex-direction: column;
+    padding: 1rem 0.75rem;
+    gap: 0;
+    background: transparent;
+    border: none;
+  }
+
+  .p-toolbar-start {
+    width: 100%;
+  }
+
+  // Toolbar buttons container
+  .toolbar-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  // Button styling
+  p-button {
+    width: 100%;
+
+    .p-button {
+      width: 100%;
+      justify-content: flex-start;
+      background: transparent;
+      border: none;
+      color: $foreground-muted;
+      transition: all 0.2s ease;
+      font-weight: 500;
+
+      &:hover {
+        background: $surface-200;
+        color: $foreground;
+        transform: translateX(2px);
+      }
+
+      &:active {
+        background: $surface-300;
+        color: $primary;
+      }
+    }
+  }
 }
 
 
@@ -63,86 +88,129 @@
 
 
 #panelContainer{
-  flex-grow:1;
-  display:flex; 
-  flex-wrap:nowrap; 
-  width:100%; 
-
-  font-family: 'IBM Plex Sans';
-  border:solid;
-
-  position:relative;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  font-family: 'IBM Plex Sans', sans-serif;
+  position: relative;
+  background: $surface-0;
+  padding: 0;
+  gap: 1rem;
 }
 
 .panel {
   display: flex;
-  // width: 100%;
   flex-grow: 2;
-  // overflow:hidden;
-  position:relative;
-  height:100%;
+  position: relative;
+  height: 100%;
+  background: $surface-100;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  border: 1px solid $border;
+  z-index: 1;
+
+  // Ensure panels don't create stacking contexts that interfere with dragging
+  isolation: auto;
+
+  // When dragging is happening, don't clip the dragged element
+  &:has(command-output[style*="z-index: 3000"]) {
+    overflow: visible;
+  }
 }
 
 .panelSeparator {
   box-sizing: border-box;
-  background-color: black;
-  width: 5px;
+  background: transparent;
+  width: 8px;
   height: 100%;
-  
   flex-grow: 0;
-  border-left: dashed thin gray;
   cursor: ew-resize;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1px;
+    height: 40px;
+    background: $border;
+    border-radius: 2px;
+  }
 }
+
 .panelSeparator:hover {
-  box-sizing: border-box;
-  
-  width: 5px;
-  height: 100%;
-  flex-grow: 0;
-  border-left: dashed thin gray;
-  background-color:$accent;
+  background: transparent;
+  width: 8px;
+
+  &::before {
+    background: $accent;
+    width: 2px;
+  }
 }
 
 .panelHeader {
   position: relative;
-  // padding-right: 10px;
   text-align: right;
-  
-  color:$foreground;
-  background: $background;
+  color: $foreground;
+  background: $surface-100;
   display: flex;
   justify-content: space-between;
-  height: 20px;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  min-height: 48px;
   width: 100%;
   cursor: pointer;
+  border-bottom: 1px solid $border;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $surface-200;
+  }
 }
+
 .panelHeader ion-icon {
-  color: gray;
+  color: $foreground-muted;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $foreground;
+  }
 }
+
 .panelHeader .panelTitle {
-  
-  padding-bottom:3px;
-  left: 10px;
+  padding-bottom: 0;
   position: relative;
-  color:black;
-  user-select:none;
+  color: $foreground;
+  user-select: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
 }
 
 .panelHeader.active {
-  background: $primary-dark-variant;
+  background: $surface-200;
+  border-bottom-color: $primary;
+  border-bottom-width: 2px;
 }
 
 .panelHeader.active .panelTitle{
-  color:white;
+  color: $primary;
+  font-weight: 600;
 }
 
 .separatorCloseIcon {
-  transition: color 0.5s;
-}
+  transition: all 0.2s ease;
+  color: $foreground-muted;
 
-.separatorCloseIcon:hover {
-  
-  color: pink;
+  &:hover {
+    color: #ef4444;
+    transform: scale(1.1);
+  }
 }
 
 .fixed-content {
@@ -160,22 +228,33 @@
 }
 
 .commandOutputComponentsContainer{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  height:100%;
-  position:relative;overflow:visible;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: visible;
+  z-index: auto;
+
+  // Ensure dragged elements are not clipped
+  &:has(command-output[style*="z-index: 3000"]) {
+    overflow: visible !important;
+    z-index: 9999;
+  }
 }
 
 .outputContainer {
   position: relative;
-  flex:auto;
+  flex: auto;
   overflow: visible;
-  border-bottom: solid thin black;
-  // height:calc(100% - 50px);
-  background : $background;
-  flex-grow:2;
-  height:100%;
+  background: $output-content-background;
+  flex-grow: 2;
+  height: 100%;
+  z-index: 1;
+
+  // When dragging is happening, ensure overflow doesn't clip
+  &:has(command-output[style*="z-index: 3000"]) {
+    overflow: visible !important;
+  }
 }
 
 
@@ -185,33 +264,22 @@
 
 .commandLineContainer {
   position: relative;
-
-  // height:50px;
-  // min-height:50px;
-  flex-grow:0;
-  // padding: 5px;
+  flex-grow: 0;
   font-family: 'IBM Plex Mono', monospace;
-
   z-index: 999;
   background: $command-line-background;
-
-  border-top: solid thin gray;
+  border-top: 1px solid $border;
+  box-shadow: none;
 }
 
 .dropIntoPanelIndicator {
   position: absolute;
   display: none;
-  // width:100%;
-  border: dashed 4px red;
-  height:100%;
-  top: 0px;
-  /*
-  although the translation transform that happens
-  in pulse-cli.component.ts::mouseMoveWhileCommandOutputMouseDown
-  has the correct displacement offset, for some unknown yet reason, 
-  this box is place sme pixels to the right, so this 
-  value for left is to offset that
-  */
+  border: dashed 3px $accent;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 8px;
+  height: 100%;
+  top: 0;
   left: -3px;
   z-index: 1000;
   pointer-events: none;
@@ -248,10 +316,18 @@ div.mat-select-arrow{
 
 
 .close-button{
-  background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com --%3E%3Ctitle%3Eclose-icon%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cpath d='M9,18 C4.02943725,18 0,13.9705627 0,9 C0,4.02943725 4.02943725,0 9,0 C13.9705627,0 18,4.02943725 18,9 C18,13.9705627 13.9705627,18 9,18 Z M10.7099567,9.02970297 L13.31435,6.42530968 C13.7783393,5.96132042 13.7783393,5.2090452 13.31435,4.74505594 C12.8503607,4.28106668 12.0980855,4.28106668 11.6340963,4.74505594 L9.02970297,7.34944923 L6.42530968,4.74505594 C5.96132042,4.28106668 5.2090452,4.28106668 4.74505594,4.74505594 C4.28106668,5.2090452 4.28106668,5.96132042 4.74505594,6.42530968 L7.34944923,9.02970297 L4.74505594,11.6340963 C4.28106668,12.0980855 4.28106668,12.8503607 4.74505594,13.31435 C5.2090452,13.7783393 5.96132042,13.7783393 6.42530968,13.31435 L9.02970297,10.7099567 L11.6340963,13.31435 C12.0980855,13.7783393 12.8503607,13.7783393 13.31435,13.31435 C13.7783393,12.8503607 13.7783393,12.0980855 13.31435,11.6340963 L10.7099567,9.02970297 Z' id='Combined-Shape' fill='%23000000'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:center;
-  background-size:100%;
-  width:16px;
-  height:16px;
+  background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cpath d='M9,18 C4.02943725,18 0,13.9705627 0,9 C0,4.02943725 4.02943725,0 9,0 C13.9705627,0 18,4.02943725 18,9 C18,13.9705627 13.9705627,18 9,18 Z M10.7099567,9.02970297 L13.31435,6.42530968 C13.7783393,5.96132042 13.7783393,5.2090452 13.31435,4.74505594 C12.8503607,4.28106668 12.0980855,4.28106668 11.6340963,4.74505594 L9.02970297,7.34944923 L6.42530968,4.74505594 C5.96132042,4.28106668 5.2090452,4.28106668 4.74505594,4.74505594 C4.28106668,5.2090452 4.28106668,5.96132042 4.74505594,6.42530968 L7.34944923,9.02970297 L4.74505594,11.6340963 C4.28106668,12.0980855 4.28106668,12.8503607 4.74505594,13.31435 C5.2090452,13.7783393 5.96132042,13.7783393 6.42530968,13.31435 L9.02970297,10.7099567 L11.6340963,13.31435 C12.0980855,13.7783393 12.8503607,13.7783393 13.31435,13.31435 C13.7783393,12.8503607 13.7783393,12.0980855 13.31435,11.6340963 L10.7099567,9.02970297 Z' id='Combined-Shape' fill='%239ca3af'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  width: 18px;
+  height: 18px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='18px' height='18px' viewBox='0 0 18 18' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cpath d='M9,18 C4.02943725,18 0,13.9705627 0,9 C0,4.02943725 4.02943725,0 9,0 C13.9705627,0 18,4.02943725 18,9 C18,13.9705627 13.9705627,18 9,18 Z M10.7099567,9.02970297 L13.31435,6.42530968 C13.7783393,5.96132042 13.7783393,5.2090452 13.31435,4.74505594 C12.8503607,4.28106668 12.0980855,4.28106668 11.6340963,4.74505594 L9.02970297,7.34944923 L6.42530968,4.74505594 C5.96132042,4.28106668 5.2090452,4.28106668 4.74505594,4.74505594 C4.28106668,5.2090452 4.28106668,5.96132042 4.74505594,6.42530968 L7.34944923,9.02970297 L4.74505594,11.6340963 C4.28106668,12.0980855 4.28106668,12.8503607 4.74505594,13.31435 C5.2090452,13.7783393 5.96132042,13.7783393 6.42530968,13.31435 L9.02970297,10.7099567 L11.6340963,13.31435 C12.0980855,13.7783393 12.8503607,13.7783393 13.31435,13.31435 C13.7783393,12.8503607 13.7783393,12.0980855 13.31435,11.6340963 L10.7099567,9.02970297 Z' id='Combined-Shape' fill='%236b7280'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    transform: scale(1.05);
+  }
 }
