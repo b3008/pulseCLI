@@ -1,10 +1,8 @@
 import {Component, ElementRef, EventEmitter, Output, ViewChild, ViewContainerRef, ChangeDetectorRef, Renderer2, Pipe, PipeTransform, ComponentFactoryResolver, OnInit} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PulseCLIService } from '../../pulse-cli.service';
 import {CommandRegistryService} from '../../command-registry.service/command-registry.service';
-
-
-
-// import { SafeHtmlPipe } from '../safe-html';
+import { SafeHtmlPipe } from '../../safe-html';
 
 declare var window;
 
@@ -12,6 +10,8 @@ declare var window;
   selector: 'command-output',
   templateUrl: './command-output.component.html',
   styleUrls: ['./command-output.component.scss'],
+  standalone: true,
+  imports: [CommonModule, SafeHtmlPipe]
 })
 export class CommandOutputComponent implements OnInit {
 

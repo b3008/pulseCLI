@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "cliLib:build"
+            "buildTarget": "cliLib:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "cliLib:build:production"
+              "buildTarget": "cliLib:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "cliLib:build"
+            "buildTarget": "cliLib:build"
           }
         },
         "test": {
@@ -91,18 +91,6 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
             ]
           }
         }
@@ -128,15 +116,6 @@
               "devServerTarget": "cliLib:serve:production"
             }
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -147,9 +126,8 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/pulse-cli/tsconfig.lib.json",
             "project": "projects/pulse-cli/ng-package.json"
           }
         },
@@ -160,21 +138,8 @@
             "tsConfig": "projects/pulse-cli/tsconfig.spec.json",
             "karmaConfig": "projects/pulse-cli/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/pulse-cli/tsconfig.lib.json",
-              "projects/pulse-cli/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     }
-  },
-  "defaultProject": "cliLib"
+  }
 }

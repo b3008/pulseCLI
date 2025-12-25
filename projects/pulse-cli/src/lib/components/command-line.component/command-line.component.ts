@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, Input, Renderer2, Inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 // import {SocketService} from '../../services/socket/socket.service';
 import { CommandRegistryService } from '../../command-registry.service/command-registry.service';
 // import {SuggestionBoxComponent} from '../suggestion-box/suggestion-box.component'
@@ -8,6 +9,8 @@ import { CommandRegistryService } from '../../command-registry.service/command-r
   selector: 'command-line',
   templateUrl: './command-line.component.html',
   styleUrls: ['./command-line.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class CommandLineComponent implements OnInit {
 

@@ -7,12 +7,16 @@ import {
   ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, ChangeDetectorRef,
   ViewEncapsulation,
   QueryList,
-  ResolvedReflectiveFactory,
   Inject
 
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Button } from 'primeng/button';
+import { Toolbar } from 'primeng/toolbar';
+import { PrimeTemplate } from 'primeng/api'; // Required for pTemplate directive in Toolbar
 import { CommandOutputComponent } from '../components/command-output.component/command-output.component';
 import { CommandLineComponent } from '../components/command-line.component/command-line.component';
+import { HelpItemComponent } from '../components/help-item/help-item.component';
 import { CommandRegistryService } from '../command-registry.service/command-registry.service';
 import { PulseCLIService } from '../pulse-cli.service';
  
@@ -27,7 +31,9 @@ declare var window;
   selector: 'lib-pulseCLI',
   templateUrl: './pulse-cli.component.html',
   styleUrls: ['./pulse-cli.component.scss'],
-  styles: []
+  styles: [],
+  standalone: true,
+  imports: [CommonModule, CommandLineComponent, Button, Toolbar, PrimeTemplate]
 })
 
 

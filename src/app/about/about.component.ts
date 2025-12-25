@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
-  styleUrls: ['./about.component.sass']
+  styleUrls: ['./about.component.sass'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class AboutComponent implements OnInit {
 

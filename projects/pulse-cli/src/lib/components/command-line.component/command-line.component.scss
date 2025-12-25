@@ -1,4 +1,4 @@
-@import "../../_variables.scss";
+@use "../../_variables" as *;
 
 :host {
   position: relative;
@@ -9,53 +9,59 @@ textarea {
 }
 
 #divArea {
-  margin: 0px auto;
+  margin: 0 auto;
   color: $command-line-foreground;
   min-width: 50px;
-  // border-bottom:solid thin;
-  padding:10px;
-  padding-left: 25px;
+  padding: 12px;
+  padding-left: 32px;
   font-size: 14px;
-  font-weight:bold;
+  font-weight: 500;
   user-select: text;
   font-family: 'IBM Plex Mono', monospace;
+  background: $command-line-background;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  margin: 8px;
 }
 
 #divArea::before {
-  //  content:"\01F916";
-  content: " > ";
-  font-size: 14px;
-  margin-left: -22px;
+  content: " ❯ ";
+  font-size: 16px;
+  margin-left: -26px;
+  color: $command-line-prompt;
+  font-weight: bold;
 }
 
-#divArea:focus{
-    border:none;
+#divArea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2),
+              0 0 8px rgba(99, 102, 241, 0.1);
+  background: $surface-200;
 }
+
 [contenteditable]:focus {
-    outline: 0px solid transparent;
+  outline: 0 solid transparent;
 }
 
 pre:focus{
     border:solid pink;
 }
 .command {
-  color: black;
-  font-size: 18px;
-  font-weight: bold;
+  color: $foreground;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .glow {
-  -webkit-animation: glow 2s ease-in-out infinite alternate;
-  -moz-animation: glow 2s ease-in-out infinite alternate;
   animation: glow 2s ease-in-out infinite alternate;
 }
 
-@-webkit-keyframes glow {
+@keyframes glow {
   from {
-    text-shadow: 0 0 5px #82bd1d, 0 0 10px #82bd1d;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2), 0 0 8px rgba(99, 102, 241, 0.1);
   }
 
   to {
-    text-shadow: 0 0 10px limegreen, 0 0 15px limegreen;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3), 0 0 12px rgba(99, 102, 241, 0.15);
   }
 }
