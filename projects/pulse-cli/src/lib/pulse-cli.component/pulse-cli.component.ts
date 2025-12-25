@@ -1951,13 +1951,25 @@ export class PulseCLIComponent implements OnInit {
     this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "opacity", "1");
     this.renderer.setStyle(this.dropIntoPanelIndicator.element.nativeElement, "display", "none");
 
-    this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "transform", "");
-    this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "z-index", this.commandOutputNativeElementOriginalZIndex);
-    this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "position", "");
-
-    // this.moveCommandOutputToSplitByIndex(this.commandOutputNativeElementToMoveAround, this.indexOfPanelWithMaximumOverlap);
     let tabAndIndex = this.findComponentIndex(this.commandOutputNativeElementToMoveAround);
-    this.commandRegistry.parseCommand(`move card ${tabAndIndex.tab + 1},${tabAndIndex.index + 1}, ${this.indexOfPanelWithMaximumOverlap + 1}`);
+
+    // Check if card is being dropped on a different panel
+    if (this.indexOfPanelWithMaximumOverlap !== tabAndIndex.tab && this.indexOfPanelWithMaximumOverlap >= 0) {
+      // Move to different panel - call move directly
+      this.moveCommandOutputToSplitByIndex(this.commandOutputNativeElementToMoveAround, this.indexOfPanelWithMaximumOverlap);
+
+      // Reset styles after move completes (with small delay to allow move to process)
+      setTimeout(() => {
+        this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "transform", "");
+        this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "z-index", this.commandOutputNativeElementOriginalZIndex);
+        this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "position", "");
+      }, 50);
+    } else {
+      // Same panel - just reset visual styles
+      this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "transform", "");
+      this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "z-index", this.commandOutputNativeElementOriginalZIndex);
+      this.renderer.setStyle(this.commandOutputNativeElementToMoveAround, "position", "");
+    }
 
     this.headerDragX = 0;
     this.headerDragY = 0;
