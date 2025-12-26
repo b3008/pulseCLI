@@ -67,8 +67,8 @@
             </div>
           </ng-container>
 
-          <div *ngIf="commandOutputComponentLists.length>1">
-            <div class="close-button" name="close-circle"></div>
+          <div *ngIf="commandOutputComponentLists.length>1" (click)="commandRegistry.executeCommand('remove panel')">
+            <i class="pi pi-times-circle close-button"></i>
           </div>
         </div>
 
