@@ -49,13 +49,13 @@ $primary: #6366f1;           // Indigo - for accents and interactive elements
 $primary-hover: #4f46e5;     // Darker indigo for hover states
 $primary-dark-variant: #3730a3; // Even darker for active states
 
-$surface-0: #f8f9fb;         // Very light gray - main background
+$surface-0: #f5f6f8;         // Very light gray - main background (slightly darker for contrast)
 $surface-100: #ffffff;       // White - panels and cards
-$surface-200: #f3f4f6;       // Light gray - headers, hover states
-$surface-300: #e5e7eb;       // Medium gray - borders, separators
+$surface-200: #e8eaed;       // Light gray - headers, hover states (more contrast)
+$surface-300: #d1d5db;       // Medium gray - borders, separators (darker for visibility)
 
-$foreground: #1f2937;        // Dark gray text
-$foreground-muted: #6b7280;  // Muted gray text
+$foreground: #111827;        // Dark gray text (darker for better contrast)
+$foreground-muted: #4b5563;  // Muted gray text (darker for readability)
 $foreground-dim: #9ca3af;    // Dimmed gray text
 
 $background: $surface-0;
@@ -63,8 +63,8 @@ $accent: #6366f1;            // Indigo for highlights
 $accent-hover: #4f46e5;      // Darker indigo for hover
 $accent-light-variant: #818cf8;
 
-$border: #e5e7eb;            // Light gray borders
-$border-highlight: #d1d5db;  // Slightly darker for emphasis
+$border: #d1d5db;            // Light gray borders (darker for visibility)
+$border-highlight: #9ca3af;  // Slightly darker for emphasis
 
 // Command line specific
 $command-line-background: $surface-100;

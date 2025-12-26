@@ -185,8 +185,7 @@
 
 .panelHeader.active {
   background: $surface-200;
-  border-bottom-color: $primary;
-  border-bottom-width: 2px;
+  // Removed strong border - keeping same subtle border as inactive state
 }
 
 .panelHeader.active .panelTitle{
