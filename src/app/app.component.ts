@@ -11,12 +11,12 @@ import {AboutComponent } from './about/about.component';
   imports: [RouterModule, PulseCLIComponent]
 })
 export class AppComponent implements OnInit{
-  title = 'cliLib';
+  title = 'PulseCLI Demo';
 
   @ViewChild('pulse', { read: PulseCLIComponent, static: true }) pulse: PulseCLIComponent;
 
   ngOnInit(){
-      this.pulse.commandRegistry.addCommand("about", "about this probject", "")
+      this.pulse.commandRegistry.addCommand("about", "about this project", "")
       .action((args, commandString,resolve, reject)=>{
           //insert a component
           this.pulse.insertComponent(AboutComponent, "about");

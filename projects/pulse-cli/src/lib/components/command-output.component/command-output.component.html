@@ -4,7 +4,7 @@
         <i class="pi pi-times-circle close-button" (click)="destroyCommandOutput($event)"></i>
     </div>
     <div class="contentContainer" style="height:100%">
-        <div (commandIssued)="commandIssued($event)" (updateCommandString)="updateCommandString($event.detail.commandString)" style="height:100%">
+        <div (commandIssued)="commandIssued($event)" (updateCommandString)="handleUpdateCommandString($event)" style="height:100%">
             <!-- <command-line #commandline command="{{command}}"></command-line> -->
             <div #container class="output" (update)="detectChanges()" [innerHTML]="myHTML | safeHtml"></div>
         </div>

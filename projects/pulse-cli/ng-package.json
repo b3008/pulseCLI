@@ -1,8 +1,13 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "whitelistedNonPeerDependencies": ["."],
   "dest": "../../dist/pulse-cli",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": [
+    "./bin/**/*"
+  ],
+  "allowedNonPeerDependencies": [
+    "showdown"
+  ]
 }

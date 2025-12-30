@@ -1764,43 +1764,71 @@ export class PulseCLIComponent implements OnInit {
   // }
 
 
-  indexOfSeparatorMouseDown = null;;
+  indexOfSeparatorMouseDown = null;
+  private readonly MIN_PANEL_WIDTH_PERCENT = 15; // Minimum 15% width for any panel
+
   panelSeparatorMousedown(event, index) {
+    event.preventDefault(); // Prevent text selection during drag
+    event.stopPropagation();
 
     this.splitSeparatorArr[index].mousedown = true;
     this.indexOfSeparatorMouseDown = index;
 
+    // Add body class to prevent text selection during drag
+    document.body.classList.add('resizing-panels');
   }
 
   panelSeparatorMouseup(event, index) {
-
+    // Cleanup handled in panelContainerMouseUp
   }
+
   panelContainerMouseUp(event) {
+    // Reset all separator states
     for (let i = 0; i < this.splitSeparatorArr.length; i++) {
       this.splitSeparatorArr[i].mousedown = false;
     }
     this.indexOfSeparatorMouseDown = null;
+
+    // Remove body class to restore normal cursor and selection
+    document.body.classList.remove('resizing-panels');
+
+    this.changeDetector.detectChanges();
   }
 
   lastMouseMoveEvent;
-
 
   panelContainerMousemove(event) {
     this.lastMouseMoveEvent = event;
     let index = this.indexOfSeparatorMouseDown;
 
     if (index === null) return;
-    if (this.splitSeparatorArr[index].mousedown) {
+    if (!this.splitSeparatorArr[index] || !this.splitSeparatorArr[index].mousedown) return;
 
-      let movePercent = 100 * event.movementX / parseInt(window.getComputedStyle(this.panelContainer.nativeElement).width)
+    // Calculate movement as percentage of container width
+    const containerWidth = this.panelContainer.nativeElement.offsetWidth;
+    if (!containerWidth) return;
 
-      this.splitWidthArr[index] += movePercent;
-      if (this.splitWidthArr[index + 1]) {
-        this.splitWidthArr[index + 1] -= movePercent;
-      }
+    let movePercent = (100 * event.movementX) / containerWidth;
 
+    // Get current widths
+    const leftPanelWidth = this.splitWidthArr[index];
+    const rightPanelWidth = this.splitWidthArr[index + 1];
+
+    if (rightPanelWidth === undefined) return;
+
+    // Calculate new widths
+    const newLeftWidth = leftPanelWidth + movePercent;
+    const newRightWidth = rightPanelWidth - movePercent;
+
+    // Apply minimum width constraints
+    if (newLeftWidth >= this.MIN_PANEL_WIDTH_PERCENT &&
+        newRightWidth >= this.MIN_PANEL_WIDTH_PERCENT) {
+      this.splitWidthArr[index] = newLeftWidth;
+      this.splitWidthArr[index + 1] = newRightWidth;
+
+      this.changeDetector.detectChanges();
     }
-    this.changeDetector.detectChanges();
+    // If constraints would be violated, don't apply the change (panel size stays the same)
   }
 
 

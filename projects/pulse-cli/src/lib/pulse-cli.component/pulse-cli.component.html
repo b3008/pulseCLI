@@ -96,10 +96,12 @@
 
 
 
-      <div *ngIf="shouldRenderSeparator(i)" [attr.data-index]=i class="panelSeparator"
-        (mousedown)="panelSeparatorMousedown($event ,i)" (mouseup)="panelSeparatorMouseup($event, i)">
-
-
+      <div *ngIf="shouldRenderSeparator(i)"
+        [attr.data-index]=i
+        class="panelSeparator"
+        [class.dragging]="splitSeparatorArr[i]?.mousedown"
+        (mousedown)="panelSeparatorMousedown($event ,i)"
+        (mouseup)="panelSeparatorMouseup($event, i)">
       </div>
 
 
