@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cliLib": {
+    "pulse-cli-demo": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/cliLib",
+            "outputPath": "dist/pulse-cli-demo",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "cliLib:build"
+            "buildTarget": "pulse-cli-demo:build"
           },
           "configurations": {
             "production": {
-              "buildTarget": "cliLib:build:production"
+              "buildTarget": "pulse-cli-demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "cliLib:build"
+            "buildTarget": "pulse-cli-demo:build"
           }
         },
         "test": {
@@ -100,7 +100,7 @@
 
       }
     },
-    "cliLib-e2e": {
+    "pulse-cli-demo-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -109,11 +109,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "cliLib:serve"
+            "devServerTarget": "pulse-cli-demo:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "cliLib:serve:production"
+              "devServerTarget": "pulse-cli-demo:serve:production"
             }
           }
         }

@@ -5,18 +5,18 @@
 
 /* Global CSS Variables for Theme Colors */
 :root {
-  --surface-0: #f8f9fb;
+  --surface-0: #f5f6f8;
   --surface-100: #ffffff;
-  --surface-200: #f3f4f6;
-  --surface-300: #e5e7eb;
+  --surface-200: #e8eaed;
+  --surface-300: #d1d5db;
 
   --primary-color: #6366f1;
   --primary-hover: #4f46e5;
 
-  --text-color: #1f2937;
-  --text-muted: #6b7280;
+  --text-color: #111827;
+  --text-muted: #4b5563;
 
-  --border-color: #e5e7eb;
+  --border-color: #d1d5db;
   --accent-color: #6366f1;
 
   --surface-border: var(--border-color);
@@ -61,4 +61,15 @@ body {
 ::selection {
   background: rgba(99, 102, 241, 0.15);
   color: var(--text-color);
+}
+
+/* Panel Resizing State */
+body.resizing-panels {
+  cursor: ew-resize !important;
+  user-select: none !important;
+
+  * {
+    cursor: ew-resize !important;
+    user-select: none !important;
+  }
 }

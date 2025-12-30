@@ -47,6 +47,28 @@ Commands are registered through the `CommandRegistryService` and can be executed
 
 ## Installation
 
+### For Users
+
+Install the published package from npm:
+
+```bash
+npm install pulse-cli
+```
+
+### Quick Start with CLI
+
+After installing, you can quickly scaffold a basic example:
+
+```bash
+npx pulse-cli init
+```
+
+This creates a basic PulseCLI setup in your `src/app` directory with example components.
+
+### For Development
+
+Clone and install dependencies:
+
 ```bash
 npm install
 ```
@@ -63,11 +85,19 @@ Navigate to `http://localhost:4200/`. The application will automatically reload 
 
 ## Building
 
-Build the project for production:
+Build the demo application:
 
 ```bash
 npm run build
 ```
+
+Build the library for publishing:
+
+```bash
+ng build pulseCLI
+```
+
+The built library will be in `dist/pulse-cli/`.
 
 Deploy to GitHub Pages:
 
@@ -76,6 +106,31 @@ npm run deploy
 ```
 
 This builds the project and outputs to the `docs/` directory with the base href set to `/pulseCLI/`.
+
+## Publishing to npm
+
+Before publishing, make sure to:
+
+1. Update the version in [projects/pulse-cli/package.json](projects/pulse-cli/package.json)
+2. Update author and repository information in the same file
+3. Build the library:
+
+```bash
+ng build pulseCLI
+```
+
+4. Navigate to the dist directory and publish:
+
+```bash
+cd dist/pulse-cli
+npm publish
+```
+
+For scoped packages, use:
+
+```bash
+npm publish --access public
+```
 
 ## Testing
 

@@ -64,6 +64,12 @@ export class CommandOutputComponent implements OnInit {
   public updateCommandString(commandString){
     this.commandString = commandString
   }
+
+  public handleUpdateCommandString(event: any){
+    if (event.detail && event.detail.commandString) {
+      this.updateCommandString(event.detail.commandString);
+    }
+  }
   
   public placeInContainer(htmlString:string){
     
