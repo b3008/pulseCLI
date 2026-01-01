@@ -107,17 +107,20 @@ export class PulseCommandOutput extends PulseBaseComponent {
 
     const container = document.createElement('div');
     container.className = 'output-card';
+    container.setAttribute('part', 'output-card');
     container.id = this.instanceId;
 
     // Header
     const header = document.createElement('div');
     header.className = 'header';
+    header.setAttribute('part', 'header');
     if (draggable) {
       header.classList.add('draggable');
     }
 
     const commandSpan = document.createElement('span');
     commandSpan.className = 'command-text';
+    commandSpan.setAttribute('part', 'command-text');
     commandSpan.textContent = command;
 
     const actions = document.createElement('div');
@@ -131,6 +134,7 @@ export class PulseCommandOutput extends PulseBaseComponent {
     if (closeable) {
       const closeBtn = document.createElement('button');
       closeBtn.className = 'close-btn';
+      closeBtn.setAttribute('part', 'close-button');
       closeBtn.innerHTML = '×';
       closeBtn.title = 'Close';
       closeBtn.setAttribute('aria-label', 'Close');
@@ -143,6 +147,7 @@ export class PulseCommandOutput extends PulseBaseComponent {
     // Content
     const content = document.createElement('div');
     content.className = 'content';
+    content.setAttribute('part', 'content');
 
     // Default slot for content
     const contentSlot = document.createElement('slot');

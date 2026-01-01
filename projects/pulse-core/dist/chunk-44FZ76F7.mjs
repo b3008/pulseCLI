@@ -2,7 +2,7 @@ import {
   PulseBaseComponent,
   __publicField,
   getBaseStyles
-} from "./chunk-LT3FAKWS.mjs";
+} from "./chunk-ZF76DJ4G.mjs";
 
 // src/components/CommandLine.ts
 var PulseCommandLine = class extends PulseBaseComponent {
@@ -59,12 +59,15 @@ var PulseCommandLine = class extends PulseBaseComponent {
     this.injectStyles(this.getStyles());
     const container = document.createElement("div");
     container.className = "command-line";
+    container.setAttribute("part", "command-line");
     const promptSpan = document.createElement("span");
     promptSpan.className = "prompt";
+    promptSpan.setAttribute("part", "prompt");
     promptSpan.textContent = prompt;
     const input = document.createElement("input");
     input.type = "text";
     input.className = "input";
+    input.setAttribute("part", "input");
     input.placeholder = placeholder;
     input.disabled = disabled;
     input.spellcheck = false;

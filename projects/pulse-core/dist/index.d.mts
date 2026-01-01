@@ -504,6 +504,55 @@ declare class SessionStorageAdapter implements StorageAdapter {
 declare function createStorageAdapter(prefix?: string): StorageAdapter;
 
 /**
+ * Theme configuration for PulseCLI components
+ */
+interface PulseTheme {
+    bg: string;
+    bgSecondary: string;
+    text: string;
+    textMuted: string;
+    accent: string;
+    accentHover: string;
+    error: string;
+    success: string;
+    warning: string;
+    border: string;
+    fontFamily: string;
+    fontSize: string;
+    lineHeight: string;
+    spacingXs: string;
+    spacingSm: string;
+    spacingMd: string;
+    spacingLg: string;
+    radius: string;
+    transition: string;
+}
+/**
+ * Dark theme (default)
+ */
+declare const darkTheme: PulseTheme;
+/**
+ * Light theme
+ */
+declare const lightTheme: PulseTheme;
+/**
+ * High contrast theme for accessibility
+ */
+declare const highContrastTheme: PulseTheme;
+/**
+ * All available theme presets
+ */
+declare const PULSE_THEMES: {
+    readonly dark: PulseTheme;
+    readonly light: PulseTheme;
+    readonly "high-contrast": PulseTheme;
+};
+type ThemePreset = keyof typeof PULSE_THEMES;
+/**
+ * Convert a theme object to CSS variable declarations
+ */
+declare function themeToCSS(theme: PulseTheme): string;
+/**
  * Base class for PulseCLI Web Components
  *
  * Provides common functionality for all components:
@@ -565,32 +614,34 @@ declare abstract class PulseBaseComponent extends HTMLElement {
 }
 /**
  * CSS custom properties (CSS variables) used by PulseCLI components
+ * @deprecated Use PULSE_THEMES and themeToCSS instead
  */
 declare const PULSE_CSS_VARS: {
-    readonly '--pulse-bg': "#1a1a2e";
-    readonly '--pulse-bg-secondary': "#16213e";
-    readonly '--pulse-text': "#eee";
-    readonly '--pulse-text-muted': "#888";
-    readonly '--pulse-accent': "#00d4ff";
-    readonly '--pulse-accent-hover': "#00b8e6";
-    readonly '--pulse-error': "#ff4757";
-    readonly '--pulse-success': "#2ed573";
-    readonly '--pulse-warning': "#ffa502";
-    readonly '--pulse-border': "#333";
-    readonly '--pulse-font-family': "'Fira Code', 'Monaco', 'Consolas', monospace";
-    readonly '--pulse-font-size': "14px";
-    readonly '--pulse-line-height': "1.5";
-    readonly '--pulse-spacing-xs': "4px";
-    readonly '--pulse-spacing-sm': "8px";
-    readonly '--pulse-spacing-md': "16px";
-    readonly '--pulse-spacing-lg': "24px";
-    readonly '--pulse-radius': "4px";
-    readonly '--pulse-transition': "0.2s ease";
+    readonly "--pulse-bg": string;
+    readonly "--pulse-bg-secondary": string;
+    readonly "--pulse-text": string;
+    readonly "--pulse-text-muted": string;
+    readonly "--pulse-accent": string;
+    readonly "--pulse-accent-hover": string;
+    readonly "--pulse-error": string;
+    readonly "--pulse-success": string;
+    readonly "--pulse-warning": string;
+    readonly "--pulse-border": string;
+    readonly "--pulse-font-family": string;
+    readonly "--pulse-font-size": string;
+    readonly "--pulse-line-height": string;
+    readonly "--pulse-spacing-xs": string;
+    readonly "--pulse-spacing-sm": string;
+    readonly "--pulse-spacing-md": string;
+    readonly "--pulse-spacing-lg": string;
+    readonly "--pulse-radius": string;
+    readonly "--pulse-transition": string;
 };
 /**
  * Generate base CSS with custom properties
+ * @param theme - Optional theme to use (defaults to dark theme)
  */
-declare function getBaseStyles(): string;
+declare function getBaseStyles(theme?: PulseTheme): string;
 
 /**
  * Events emitted by pulse-command-output
@@ -790,11 +841,35 @@ interface PulseTerminalEvents {
  */
 declare class PulseTerminal extends PulseBaseComponent {
     static get observedAttributes(): string[];
+    /** Registry of custom user-defined themes */
+    private static customThemes;
+    /**
+     * Register a custom theme globally
+     * @param name - Unique name for the theme
+     * @param theme - Partial theme object (merges with dark theme defaults)
+     */
+    static registerTheme(name: string, theme: Partial<PulseTheme>): void;
+    /**
+     * Unregister a custom theme
+     * @param name - Name of the theme to remove
+     */
+    static unregisterTheme(name: string): boolean;
+    /**
+     * Get a registered theme by name (checks custom themes first, then built-in)
+     * @param name - Theme name
+     */
+    static getThemeByName(name: string): PulseTheme | undefined;
+    /**
+     * Get all registered theme names (built-in + custom)
+     */
+    static getThemeNames(): string[];
     /** The command registry for this terminal */
     readonly registry: CommandRegistry;
     private commandLine;
     private outputContainer;
     private outputs;
+    private currentTheme;
+    private themeStyleEl;
     constructor();
     /**
      * Register built-in commands
@@ -805,9 +880,30 @@ declare class PulseTerminal extends PulseBaseComponent {
      */
     execute(command: string): Promise<unknown>;
     /**
+     * Set the terminal theme
+     * @param theme - Theme name (built-in or custom) or a partial PulseTheme object
+     */
+    setTheme(theme: string | Partial<PulseTheme>): void;
+    /**
+     * Get the current theme
+     */
+    getTheme(): PulseTheme;
+    /**
+     * Apply theme by updating CSS variables
+     */
+    private applyTheme;
+    /**
      * Add output to the terminal
      */
     addOutput(content: string, command?: string): PulseCommandOutput;
+    /** Counter for unique mount point IDs */
+    private mountCounter;
+    /**
+     * Create an output card with a mount point for rendering custom content (e.g., React components)
+     * @param command - The command string to display in the output header
+     * @returns The mount point element where you can render your content
+     */
+    createOutputMount(command?: string): HTMLElement;
     /**
      * Clear all outputs
      */
@@ -911,4 +1007,4 @@ declare const VERSION = "0.1.0";
  */
 declare function defineElements(): void;
 
-export { type Command, type CommandCallback, type CommandEvent, CommandHistory, type CommandHistoryInterface, type CommandHistoryOptions, type CommandLineEvents, CommandOption, type CommandOutputEvents, CommandParser, CommandRegistry, type CommandRegistryInterface, type CommandRegistryOptions, type ExecuteOptions, LocalStorageAdapter, MemoryStorageAdapter, type Option, PULSE_CSS_VARS, type ParseResult, PulseBaseComponent, PulseCommand, PulseCommandLine, PulseCommandOutput, PulseTerminal, type PulseTerminalEvents, SessionStorageAdapter, type StorageAdapter, type UnknownCommandCallback, VERSION, camelToKebab, createStorageAdapter, debounce, deepClone, defineElements, escapeHtml, formatDuration, getBaseStyles, isBrowser, kebabToCamel, supportsCustomElements, throttle, uniqueId, waitFor };
+export { type Command, type CommandCallback, type CommandEvent, CommandHistory, type CommandHistoryInterface, type CommandHistoryOptions, type CommandLineEvents, CommandOption, type CommandOutputEvents, CommandParser, CommandRegistry, type CommandRegistryInterface, type CommandRegistryOptions, type ExecuteOptions, LocalStorageAdapter, MemoryStorageAdapter, type Option, PULSE_CSS_VARS, PULSE_THEMES, type ParseResult, PulseBaseComponent, PulseCommand, PulseCommandLine, PulseCommandOutput, PulseTerminal, type PulseTerminalEvents, type PulseTheme, SessionStorageAdapter, type StorageAdapter, type ThemePreset, type UnknownCommandCallback, VERSION, camelToKebab, createStorageAdapter, darkTheme, debounce, deepClone, defineElements, escapeHtml, formatDuration, getBaseStyles, highContrastTheme, isBrowser, kebabToCamel, lightTheme, supportsCustomElements, themeToCSS, throttle, uniqueId, waitFor };

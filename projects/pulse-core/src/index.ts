@@ -64,7 +64,18 @@ export type { CommandLineEvents } from './components/CommandLine';
 export { PulseCommandOutput } from './components/CommandOutput';
 export type { CommandOutputEvents } from './components/CommandOutput';
 
-export { PulseBaseComponent, PULSE_CSS_VARS, getBaseStyles } from './components/BaseComponent';
+export {
+  PulseBaseComponent,
+  PULSE_CSS_VARS,
+  getBaseStyles,
+  // Theme system
+  darkTheme,
+  lightTheme,
+  highContrastTheme,
+  PULSE_THEMES,
+  themeToCSS,
+} from './components/BaseComponent';
+export type { PulseTheme, ThemePreset } from './components/BaseComponent';
 
 // Utilities
 export {

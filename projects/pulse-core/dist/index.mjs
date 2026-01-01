@@ -5,19 +5,24 @@ import {
   CommandRegistry,
   PulseCommand,
   PulseTerminal
-} from "./chunk-JJWRIG64.mjs";
+} from "./chunk-4UN3EZOE.mjs";
 import {
   PulseCommandLine
-} from "./chunk-TL76EOHM.mjs";
+} from "./chunk-44FZ76F7.mjs";
 import {
   PulseCommandOutput
-} from "./chunk-WIHM4VRZ.mjs";
+} from "./chunk-7EW2XGVE.mjs";
 import {
   PULSE_CSS_VARS,
+  PULSE_THEMES,
   PulseBaseComponent,
   __publicField,
-  getBaseStyles
-} from "./chunk-LT3FAKWS.mjs";
+  darkTheme,
+  getBaseStyles,
+  highContrastTheme,
+  lightTheme,
+  themeToCSS
+} from "./chunk-ZF76DJ4G.mjs";
 
 // src/storage/StorageAdapters.ts
 var MemoryStorageAdapter = class {
@@ -192,9 +197,9 @@ function deepClone(obj) {
 // src/index.ts
 var VERSION = "0.1.0";
 function defineElements() {
-  import("./CommandLine-W4B7GSVL.mjs");
-  import("./CommandOutput-LVOUAGKD.mjs");
-  import("./PulseTerminal-WTFU2OID.mjs");
+  import("./CommandLine-JE445Z25.mjs");
+  import("./CommandOutput-SWOK5AIT.mjs");
+  import("./PulseTerminal-TQV2GJ2L.mjs");
 }
 export {
   CommandHistory,
@@ -204,6 +209,7 @@ export {
   LocalStorageAdapter,
   MemoryStorageAdapter,
   PULSE_CSS_VARS,
+  PULSE_THEMES,
   PulseBaseComponent,
   PulseCommand,
   PulseCommandLine,
@@ -213,15 +219,19 @@ export {
   VERSION,
   camelToKebab,
   createStorageAdapter,
+  darkTheme,
   debounce,
   deepClone,
   defineElements,
   escapeHtml,
   formatDuration,
   getBaseStyles,
+  highContrastTheme,
   isBrowser,
   kebabToCamel,
+  lightTheme,
   supportsCustomElements,
+  themeToCSS,
   throttle,
   uniqueId,
   waitFor

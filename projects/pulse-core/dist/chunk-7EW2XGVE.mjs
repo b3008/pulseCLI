@@ -2,7 +2,7 @@ import {
   PulseBaseComponent,
   __publicField,
   getBaseStyles
-} from "./chunk-LT3FAKWS.mjs";
+} from "./chunk-ZF76DJ4G.mjs";
 
 // src/components/CommandOutput.ts
 var _PulseCommandOutput = class _PulseCommandOutput extends PulseBaseComponent {
@@ -64,14 +64,17 @@ var _PulseCommandOutput = class _PulseCommandOutput extends PulseBaseComponent {
     this.injectStyles(this.getStyles());
     const container = document.createElement("div");
     container.className = "output-card";
+    container.setAttribute("part", "output-card");
     container.id = this.instanceId;
     const header = document.createElement("div");
     header.className = "header";
+    header.setAttribute("part", "header");
     if (draggable) {
       header.classList.add("draggable");
     }
     const commandSpan = document.createElement("span");
     commandSpan.className = "command-text";
+    commandSpan.setAttribute("part", "command-text");
     commandSpan.textContent = command;
     const actions = document.createElement("div");
     actions.className = "actions";
@@ -81,6 +84,7 @@ var _PulseCommandOutput = class _PulseCommandOutput extends PulseBaseComponent {
     if (closeable) {
       const closeBtn = document.createElement("button");
       closeBtn.className = "close-btn";
+      closeBtn.setAttribute("part", "close-button");
       closeBtn.innerHTML = "\xD7";
       closeBtn.title = "Close";
       closeBtn.setAttribute("aria-label", "Close");
@@ -90,6 +94,7 @@ var _PulseCommandOutput = class _PulseCommandOutput extends PulseBaseComponent {
     header.appendChild(actions);
     const content = document.createElement("div");
     content.className = "content";
+    content.setAttribute("part", "content");
     const contentSlot = document.createElement("slot");
     content.appendChild(contentSlot);
     container.appendChild(header);

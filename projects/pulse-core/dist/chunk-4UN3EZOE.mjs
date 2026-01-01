@@ -1,8 +1,11 @@
 import {
+  PULSE_THEMES,
   PulseBaseComponent,
   __publicField,
-  getBaseStyles
-} from "./chunk-LT3FAKWS.mjs";
+  darkTheme,
+  getBaseStyles,
+  themeToCSS
+} from "./chunk-ZF76DJ4G.mjs";
 
 // src/core/Option.ts
 var CommandOption = class {
@@ -741,7 +744,7 @@ var CommandRegistry = class {
 };
 
 // src/components/PulseTerminal.ts
-var PulseTerminal = class extends PulseBaseComponent {
+var _PulseTerminal = class _PulseTerminal extends PulseBaseComponent {
   constructor() {
     super();
     /** The command registry for this terminal */
@@ -749,11 +752,44 @@ var PulseTerminal = class extends PulseBaseComponent {
     __publicField(this, "commandLine", null);
     __publicField(this, "outputContainer", null);
     __publicField(this, "outputs", []);
+    __publicField(this, "currentTheme", darkTheme);
+    __publicField(this, "themeStyleEl", null);
+    /** Counter for unique mount point IDs */
+    __publicField(this, "mountCounter", 0);
     this.registry = new CommandRegistry();
     this.registerBuiltinCommands();
   }
   static get observedAttributes() {
-    return ["prompt", "welcome", "max-outputs"];
+    return ["prompt", "welcome", "max-outputs", "theme"];
+  }
+  /**
+   * Register a custom theme globally
+   * @param name - Unique name for the theme
+   * @param theme - Partial theme object (merges with dark theme defaults)
+   */
+  static registerTheme(name, theme) {
+    const fullTheme = { ...darkTheme, ...theme };
+    _PulseTerminal.customThemes.set(name, fullTheme);
+  }
+  /**
+   * Unregister a custom theme
+   * @param name - Name of the theme to remove
+   */
+  static unregisterTheme(name) {
+    return _PulseTerminal.customThemes.delete(name);
+  }
+  /**
+   * Get a registered theme by name (checks custom themes first, then built-in)
+   * @param name - Theme name
+   */
+  static getThemeByName(name) {
+    return _PulseTerminal.customThemes.get(name) ?? PULSE_THEMES[name];
+  }
+  /**
+   * Get all registered theme names (built-in + custom)
+   */
+  static getThemeNames() {
+    return [...Object.keys(PULSE_THEMES), ..._PulseTerminal.customThemes.keys()];
   }
   /**
    * Register built-in commands
@@ -782,6 +818,37 @@ var PulseTerminal = class extends PulseBaseComponent {
     return this.handleCommand(command);
   }
   /**
+   * Set the terminal theme
+   * @param theme - Theme name (built-in or custom) or a partial PulseTheme object
+   */
+  setTheme(theme) {
+    let resolvedTheme;
+    if (typeof theme === "string") {
+      resolvedTheme = _PulseTerminal.getThemeByName(theme) ?? darkTheme;
+    } else {
+      resolvedTheme = { ...darkTheme, ...theme };
+    }
+    this.currentTheme = resolvedTheme;
+    this.applyTheme(resolvedTheme);
+  }
+  /**
+   * Get the current theme
+   */
+  getTheme() {
+    return this.currentTheme;
+  }
+  /**
+   * Apply theme by updating CSS variables
+   */
+  applyTheme(theme) {
+    if (!this.themeStyleEl) {
+      this.themeStyleEl = document.createElement("style");
+      this.themeStyleEl.id = "pulse-theme";
+      this.shadow.appendChild(this.themeStyleEl);
+    }
+    this.themeStyleEl.textContent = `:host { ${themeToCSS(theme)} }`;
+  }
+  /**
    * Add output to the terminal
    */
   addOutput(content, command = "") {
@@ -794,6 +861,24 @@ var PulseTerminal = class extends PulseBaseComponent {
     this.enforceMaxOutputs();
     this.scrollToBottom();
     return output;
+  }
+  /**
+   * Create an output card with a mount point for rendering custom content (e.g., React components)
+   * @param command - The command string to display in the output header
+   * @returns The mount point element where you can render your content
+   */
+  createOutputMount(command = "") {
+    const mountId = `pulse-mount-${++this.mountCounter}`;
+    const output = document.createElement("pulse-command-output");
+    output.setAttribute("command", command);
+    output.setAttribute("closeable", "");
+    this.outputContainer?.appendChild(output);
+    output.setContent(`<div id="${mountId}" class="output-mount"></div>`);
+    this.outputs.push(output);
+    this.enforceMaxOutputs();
+    this.scrollToBottom();
+    const mountPoint = output.shadowRoot?.querySelector(`#${mountId}`);
+    return mountPoint;
   }
   /**
    * Clear all outputs
@@ -811,11 +896,17 @@ var PulseTerminal = class extends PulseBaseComponent {
   render() {
     const prompt = this.getAttr("prompt", ">");
     const welcome = this.getAttr("welcome", "");
+    const themeAttr = this.getAttr("theme", "");
     this.injectStyles(this.getStyles());
+    if (themeAttr && _PulseTerminal.getThemeByName(themeAttr)) {
+      this.setTheme(themeAttr);
+    }
     const container = document.createElement("div");
     container.className = "terminal";
+    container.setAttribute("part", "terminal");
     const outputContainer = document.createElement("div");
     outputContainer.className = "output-container";
+    outputContainer.setAttribute("part", "output-container");
     this.outputContainer = outputContainer;
     const commandLine = document.createElement("pulse-command-line");
     commandLine.setAttribute("prompt", prompt);
@@ -901,6 +992,11 @@ var PulseTerminal = class extends PulseBaseComponent {
       case "prompt":
         this.commandLine?.setAttribute("prompt", newValue);
         break;
+      case "theme":
+        if (newValue && _PulseTerminal.getThemeByName(newValue)) {
+          this.setTheme(newValue);
+        }
+        break;
     }
   }
   getStyles() {
@@ -982,6 +1078,9 @@ var PulseTerminal = class extends PulseBaseComponent {
     `;
   }
 };
+/** Registry of custom user-defined themes */
+__publicField(_PulseTerminal, "customThemes", /* @__PURE__ */ new Map());
+var PulseTerminal = _PulseTerminal;
 if (typeof customElements !== "undefined" && !customElements.get("pulse-terminal")) {
   customElements.define("pulse-terminal", PulseTerminal);
 }

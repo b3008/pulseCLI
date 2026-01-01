@@ -793,10 +793,33 @@ var init_CommandRegistry = __esm({
 });
 
 // src/components/BaseComponent.ts
-function getBaseStyles() {
+function themeToCSS(theme) {
+  return `
+    --pulse-bg: ${theme.bg};
+    --pulse-bg-secondary: ${theme.bgSecondary};
+    --pulse-text: ${theme.text};
+    --pulse-text-muted: ${theme.textMuted};
+    --pulse-accent: ${theme.accent};
+    --pulse-accent-hover: ${theme.accentHover};
+    --pulse-error: ${theme.error};
+    --pulse-success: ${theme.success};
+    --pulse-warning: ${theme.warning};
+    --pulse-border: ${theme.border};
+    --pulse-font-family: ${theme.fontFamily};
+    --pulse-font-size: ${theme.fontSize};
+    --pulse-line-height: ${theme.lineHeight};
+    --pulse-spacing-xs: ${theme.spacingXs};
+    --pulse-spacing-sm: ${theme.spacingSm};
+    --pulse-spacing-md: ${theme.spacingMd};
+    --pulse-spacing-lg: ${theme.spacingLg};
+    --pulse-radius: ${theme.radius};
+    --pulse-transition: ${theme.transition};
+  `;
+}
+function getBaseStyles(theme = darkTheme) {
   return `
     :host {
-      ${Object.entries(PULSE_CSS_VARS).map(([key, value]) => `${key}: ${value};`).join("\n      ")}
+      ${themeToCSS(theme)}
     }
 
     * {
@@ -804,10 +827,78 @@ function getBaseStyles() {
     }
   `;
 }
-var PulseBaseComponent, PULSE_CSS_VARS;
+var darkTheme, lightTheme, highContrastTheme, PULSE_THEMES, PulseBaseComponent, PULSE_CSS_VARS;
 var init_BaseComponent = __esm({
   "src/components/BaseComponent.ts"() {
     "use strict";
+    darkTheme = {
+      bg: "#1a1a2e",
+      bgSecondary: "#16213e",
+      text: "#eee",
+      textMuted: "#888",
+      accent: "#00d4ff",
+      accentHover: "#00b8e6",
+      error: "#ff4757",
+      success: "#2ed573",
+      warning: "#ffa502",
+      border: "#333",
+      fontFamily: "'Fira Code', 'Monaco', 'Consolas', monospace",
+      fontSize: "14px",
+      lineHeight: "1.5",
+      spacingXs: "4px",
+      spacingSm: "8px",
+      spacingMd: "16px",
+      spacingLg: "24px",
+      radius: "4px",
+      transition: "0.2s ease"
+    };
+    lightTheme = {
+      bg: "#ffffff",
+      bgSecondary: "#f5f5f5",
+      text: "#1a1a2e",
+      textMuted: "#666666",
+      accent: "#0066cc",
+      accentHover: "#0052a3",
+      error: "#dc3545",
+      success: "#28a745",
+      warning: "#ffc107",
+      border: "#dddddd",
+      fontFamily: "'Fira Code', 'Monaco', 'Consolas', monospace",
+      fontSize: "14px",
+      lineHeight: "1.5",
+      spacingXs: "4px",
+      spacingSm: "8px",
+      spacingMd: "16px",
+      spacingLg: "24px",
+      radius: "4px",
+      transition: "0.2s ease"
+    };
+    highContrastTheme = {
+      bg: "#000000",
+      bgSecondary: "#111111",
+      text: "#ffffff",
+      textMuted: "#cccccc",
+      accent: "#ffff00",
+      accentHover: "#ffcc00",
+      error: "#ff6666",
+      success: "#66ff66",
+      warning: "#ffcc00",
+      border: "#ffffff",
+      fontFamily: "'Fira Code', 'Monaco', 'Consolas', monospace",
+      fontSize: "14px",
+      lineHeight: "1.5",
+      spacingXs: "4px",
+      spacingSm: "8px",
+      spacingMd: "16px",
+      spacingLg: "24px",
+      radius: "4px",
+      transition: "0.2s ease"
+    };
+    PULSE_THEMES = {
+      dark: darkTheme,
+      light: lightTheme,
+      "high-contrast": highContrastTheme
+    };
     PulseBaseComponent = class extends HTMLElement {
       constructor() {
         super();
@@ -894,29 +985,29 @@ var init_BaseComponent = __esm({
     };
     PULSE_CSS_VARS = {
       // Colors
-      "--pulse-bg": "#1a1a2e",
-      "--pulse-bg-secondary": "#16213e",
-      "--pulse-text": "#eee",
-      "--pulse-text-muted": "#888",
-      "--pulse-accent": "#00d4ff",
-      "--pulse-accent-hover": "#00b8e6",
-      "--pulse-error": "#ff4757",
-      "--pulse-success": "#2ed573",
-      "--pulse-warning": "#ffa502",
-      "--pulse-border": "#333",
+      "--pulse-bg": darkTheme.bg,
+      "--pulse-bg-secondary": darkTheme.bgSecondary,
+      "--pulse-text": darkTheme.text,
+      "--pulse-text-muted": darkTheme.textMuted,
+      "--pulse-accent": darkTheme.accent,
+      "--pulse-accent-hover": darkTheme.accentHover,
+      "--pulse-error": darkTheme.error,
+      "--pulse-success": darkTheme.success,
+      "--pulse-warning": darkTheme.warning,
+      "--pulse-border": darkTheme.border,
       // Typography
-      "--pulse-font-family": "'Fira Code', 'Monaco', 'Consolas', monospace",
-      "--pulse-font-size": "14px",
-      "--pulse-line-height": "1.5",
+      "--pulse-font-family": darkTheme.fontFamily,
+      "--pulse-font-size": darkTheme.fontSize,
+      "--pulse-line-height": darkTheme.lineHeight,
       // Spacing
-      "--pulse-spacing-xs": "4px",
-      "--pulse-spacing-sm": "8px",
-      "--pulse-spacing-md": "16px",
-      "--pulse-spacing-lg": "24px",
+      "--pulse-spacing-xs": darkTheme.spacingXs,
+      "--pulse-spacing-sm": darkTheme.spacingSm,
+      "--pulse-spacing-md": darkTheme.spacingMd,
+      "--pulse-spacing-lg": darkTheme.spacingLg,
       // Border radius
-      "--pulse-radius": "4px",
+      "--pulse-radius": darkTheme.radius,
       // Transitions
-      "--pulse-transition": "0.2s ease"
+      "--pulse-transition": darkTheme.transition
     };
   }
 });
@@ -985,12 +1076,15 @@ var init_CommandLine = __esm({
         this.injectStyles(this.getStyles());
         const container = document.createElement("div");
         container.className = "command-line";
+        container.setAttribute("part", "command-line");
         const promptSpan = document.createElement("span");
         promptSpan.className = "prompt";
+        promptSpan.setAttribute("part", "prompt");
         promptSpan.textContent = prompt;
         const input = document.createElement("input");
         input.type = "text";
         input.className = "input";
+        input.setAttribute("part", "input");
         input.placeholder = placeholder;
         input.disabled = disabled;
         input.spellcheck = false;
@@ -1209,14 +1303,17 @@ var init_CommandOutput = __esm({
         this.injectStyles(this.getStyles());
         const container = document.createElement("div");
         container.className = "output-card";
+        container.setAttribute("part", "output-card");
         container.id = this.instanceId;
         const header = document.createElement("div");
         header.className = "header";
+        header.setAttribute("part", "header");
         if (draggable) {
           header.classList.add("draggable");
         }
         const commandSpan = document.createElement("span");
         commandSpan.className = "command-text";
+        commandSpan.setAttribute("part", "command-text");
         commandSpan.textContent = command;
         const actions = document.createElement("div");
         actions.className = "actions";
@@ -1226,6 +1323,7 @@ var init_CommandOutput = __esm({
         if (closeable) {
           const closeBtn = document.createElement("button");
           closeBtn.className = "close-btn";
+          closeBtn.setAttribute("part", "close-button");
           closeBtn.innerHTML = "\xD7";
           closeBtn.title = "Close";
           closeBtn.setAttribute("aria-label", "Close");
@@ -1235,6 +1333,7 @@ var init_CommandOutput = __esm({
         header.appendChild(actions);
         const content = document.createElement("div");
         content.className = "content";
+        content.setAttribute("part", "content");
         const contentSlot = document.createElement("slot");
         content.appendChild(contentSlot);
         container.appendChild(header);
@@ -1398,7 +1497,7 @@ var PulseTerminal_exports = {};
 __export(PulseTerminal_exports, {
   PulseTerminal: () => PulseTerminal
 });
-var PulseTerminal;
+var _PulseTerminal, PulseTerminal;
 var init_PulseTerminal = __esm({
   "src/components/PulseTerminal.ts"() {
     "use strict";
@@ -1406,7 +1505,7 @@ var init_PulseTerminal = __esm({
     init_CommandRegistry();
     init_CommandLine();
     init_CommandOutput();
-    PulseTerminal = class extends PulseBaseComponent {
+    _PulseTerminal = class _PulseTerminal extends PulseBaseComponent {
       constructor() {
         super();
         /** The command registry for this terminal */
@@ -1414,11 +1513,44 @@ var init_PulseTerminal = __esm({
         __publicField(this, "commandLine", null);
         __publicField(this, "outputContainer", null);
         __publicField(this, "outputs", []);
+        __publicField(this, "currentTheme", darkTheme);
+        __publicField(this, "themeStyleEl", null);
+        /** Counter for unique mount point IDs */
+        __publicField(this, "mountCounter", 0);
         this.registry = new CommandRegistry();
         this.registerBuiltinCommands();
       }
       static get observedAttributes() {
-        return ["prompt", "welcome", "max-outputs"];
+        return ["prompt", "welcome", "max-outputs", "theme"];
+      }
+      /**
+       * Register a custom theme globally
+       * @param name - Unique name for the theme
+       * @param theme - Partial theme object (merges with dark theme defaults)
+       */
+      static registerTheme(name, theme) {
+        const fullTheme = { ...darkTheme, ...theme };
+        _PulseTerminal.customThemes.set(name, fullTheme);
+      }
+      /**
+       * Unregister a custom theme
+       * @param name - Name of the theme to remove
+       */
+      static unregisterTheme(name) {
+        return _PulseTerminal.customThemes.delete(name);
+      }
+      /**
+       * Get a registered theme by name (checks custom themes first, then built-in)
+       * @param name - Theme name
+       */
+      static getThemeByName(name) {
+        return _PulseTerminal.customThemes.get(name) ?? PULSE_THEMES[name];
+      }
+      /**
+       * Get all registered theme names (built-in + custom)
+       */
+      static getThemeNames() {
+        return [...Object.keys(PULSE_THEMES), ..._PulseTerminal.customThemes.keys()];
       }
       /**
        * Register built-in commands
@@ -1447,6 +1579,37 @@ var init_PulseTerminal = __esm({
         return this.handleCommand(command);
       }
       /**
+       * Set the terminal theme
+       * @param theme - Theme name (built-in or custom) or a partial PulseTheme object
+       */
+      setTheme(theme) {
+        let resolvedTheme;
+        if (typeof theme === "string") {
+          resolvedTheme = _PulseTerminal.getThemeByName(theme) ?? darkTheme;
+        } else {
+          resolvedTheme = { ...darkTheme, ...theme };
+        }
+        this.currentTheme = resolvedTheme;
+        this.applyTheme(resolvedTheme);
+      }
+      /**
+       * Get the current theme
+       */
+      getTheme() {
+        return this.currentTheme;
+      }
+      /**
+       * Apply theme by updating CSS variables
+       */
+      applyTheme(theme) {
+        if (!this.themeStyleEl) {
+          this.themeStyleEl = document.createElement("style");
+          this.themeStyleEl.id = "pulse-theme";
+          this.shadow.appendChild(this.themeStyleEl);
+        }
+        this.themeStyleEl.textContent = `:host { ${themeToCSS(theme)} }`;
+      }
+      /**
        * Add output to the terminal
        */
       addOutput(content, command = "") {
@@ -1459,6 +1622,24 @@ var init_PulseTerminal = __esm({
         this.enforceMaxOutputs();
         this.scrollToBottom();
         return output;
+      }
+      /**
+       * Create an output card with a mount point for rendering custom content (e.g., React components)
+       * @param command - The command string to display in the output header
+       * @returns The mount point element where you can render your content
+       */
+      createOutputMount(command = "") {
+        const mountId = `pulse-mount-${++this.mountCounter}`;
+        const output = document.createElement("pulse-command-output");
+        output.setAttribute("command", command);
+        output.setAttribute("closeable", "");
+        this.outputContainer?.appendChild(output);
+        output.setContent(`<div id="${mountId}" class="output-mount"></div>`);
+        this.outputs.push(output);
+        this.enforceMaxOutputs();
+        this.scrollToBottom();
+        const mountPoint = output.shadowRoot?.querySelector(`#${mountId}`);
+        return mountPoint;
       }
       /**
        * Clear all outputs
@@ -1476,11 +1657,17 @@ var init_PulseTerminal = __esm({
       render() {
         const prompt = this.getAttr("prompt", ">");
         const welcome = this.getAttr("welcome", "");
+        const themeAttr = this.getAttr("theme", "");
         this.injectStyles(this.getStyles());
+        if (themeAttr && _PulseTerminal.getThemeByName(themeAttr)) {
+          this.setTheme(themeAttr);
+        }
         const container = document.createElement("div");
         container.className = "terminal";
+        container.setAttribute("part", "terminal");
         const outputContainer = document.createElement("div");
         outputContainer.className = "output-container";
+        outputContainer.setAttribute("part", "output-container");
         this.outputContainer = outputContainer;
         const commandLine = document.createElement("pulse-command-line");
         commandLine.setAttribute("prompt", prompt);
@@ -1566,6 +1753,11 @@ var init_PulseTerminal = __esm({
           case "prompt":
             this.commandLine?.setAttribute("prompt", newValue);
             break;
+          case "theme":
+            if (newValue && _PulseTerminal.getThemeByName(newValue)) {
+              this.setTheme(newValue);
+            }
+            break;
         }
       }
       getStyles() {
@@ -1647,6 +1839,9 @@ var init_PulseTerminal = __esm({
     `;
       }
     };
+    /** Registry of custom user-defined themes */
+    __publicField(_PulseTerminal, "customThemes", /* @__PURE__ */ new Map());
+    PulseTerminal = _PulseTerminal;
     if (typeof customElements !== "undefined" && !customElements.get("pulse-terminal")) {
       customElements.define("pulse-terminal", PulseTerminal);
     }
@@ -1663,6 +1858,7 @@ __export(index_exports, {
   LocalStorageAdapter: () => LocalStorageAdapter,
   MemoryStorageAdapter: () => MemoryStorageAdapter,
   PULSE_CSS_VARS: () => PULSE_CSS_VARS,
+  PULSE_THEMES: () => PULSE_THEMES,
   PulseBaseComponent: () => PulseBaseComponent,
   PulseCommand: () => PulseCommand,
   PulseCommandLine: () => PulseCommandLine,
@@ -1672,15 +1868,19 @@ __export(index_exports, {
   VERSION: () => VERSION,
   camelToKebab: () => camelToKebab,
   createStorageAdapter: () => createStorageAdapter,
+  darkTheme: () => darkTheme,
   debounce: () => debounce,
   deepClone: () => deepClone,
   defineElements: () => defineElements,
   escapeHtml: () => escapeHtml,
   formatDuration: () => formatDuration,
   getBaseStyles: () => getBaseStyles,
+  highContrastTheme: () => highContrastTheme,
   isBrowser: () => isBrowser,
   kebabToCamel: () => kebabToCamel,
+  lightTheme: () => lightTheme,
   supportsCustomElements: () => supportsCustomElements,
+  themeToCSS: () => themeToCSS,
   throttle: () => throttle,
   uniqueId: () => uniqueId,
   waitFor: () => waitFor
@@ -1884,6 +2084,7 @@ function defineElements() {
   LocalStorageAdapter,
   MemoryStorageAdapter,
   PULSE_CSS_VARS,
+  PULSE_THEMES,
   PulseBaseComponent,
   PulseCommand,
   PulseCommandLine,
@@ -1893,15 +2094,19 @@ function defineElements() {
   VERSION,
   camelToKebab,
   createStorageAdapter,
+  darkTheme,
   debounce,
   deepClone,
   defineElements,
   escapeHtml,
   formatDuration,
   getBaseStyles,
+  highContrastTheme,
   isBrowser,
   kebabToCamel,
+  lightTheme,
   supportsCustomElements,
+  themeToCSS,
   throttle,
   uniqueId,
   waitFor

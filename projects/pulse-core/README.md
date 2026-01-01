@@ -67,6 +67,24 @@ The easiest way to get started is with the built-in Web Components:
 
 ### Using with React
 
+First, add the JSX type definitions to your TypeScript config. In your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "types": ["@b3008/pulse-cli-core/jsx"]
+  }
+}
+```
+
+Or add a reference in a global `.d.ts` file in your project:
+
+```typescript
+/// <reference types="@b3008/pulse-cli-core/jsx" />
+```
+
+Then use the components:
+
 ```tsx
 import { useEffect, useRef } from 'react';
 import '@b3008/pulse-cli-core';
@@ -100,6 +118,53 @@ function Terminal() {
   );
 }
 ```
+
+#### Rendering React Components in Output
+
+Use `createOutputMount()` to get a mount point for rendering React components:
+
+```tsx
+import { createRoot } from 'react-dom/client';
+
+// Define a component
+function DataTable({ data }: { data: Array<{ name: string; value: string }> }) {
+  return (
+    <table style={{ width: '100%' }}>
+      <tbody>
+        {data.map((row, i) => (
+          <tr key={i}>
+            <td style={{ padding: '8px' }}>{row.name}</td>
+            <td style={{ padding: '8px' }}>{row.value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+// Inside your command action:
+registry.addCommand('stats', 'Show system stats', 'demo')
+  .action((args, cmd, resolve) => {
+    // Get a mount point for React
+    const mountPoint = terminal.createOutputMount(cmd);
+
+    // Render your React component
+    const root = createRoot(mountPoint);
+    root.render(
+      <DataTable data={[
+        { name: 'CPU', value: '45%' },
+        { name: 'Memory', value: '2.1 GB' },
+      ]} />
+    );
+
+    resolve(null);
+  });
+```
+
+Key points:
+- `terminal.createOutputMount(command)` creates an output card and returns the mount point
+- Use `createRoot()` from React 18+ to render JSX into the mount point
+- Call `root.unmount()` for cleanup when the output is removed (optional)
 
 ### Headless Usage (No UI)
 

@@ -1,39 +1,9 @@
-/**
- * Theme configuration for PulseCLI components
- */
-export interface PulseTheme {
-  // Colors
-  bg: string;
-  bgSecondary: string;
-  text: string;
-  textMuted: string;
-  accent: string;
-  accentHover: string;
-  error: string;
-  success: string;
-  warning: string;
-  border: string;
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 
-  // Typography
-  fontFamily: string;
-  fontSize: string;
-  lineHeight: string;
-
-  // Spacing
-  spacingXs: string;
-  spacingSm: string;
-  spacingMd: string;
-  spacingLg: string;
-
-  // Other
-  radius: string;
-  transition: string;
-}
-
-/**
- * Dark theme (default)
- */
-export const darkTheme: PulseTheme = {
+// src/components/BaseComponent.ts
+var darkTheme = {
   bg: "#1a1a2e",
   bgSecondary: "#16213e",
   text: "#eee",
@@ -52,13 +22,9 @@ export const darkTheme: PulseTheme = {
   spacingMd: "16px",
   spacingLg: "24px",
   radius: "4px",
-  transition: "0.2s ease",
+  transition: "0.2s ease"
 };
-
-/**
- * Light theme
- */
-export const lightTheme: PulseTheme = {
+var lightTheme = {
   bg: "#ffffff",
   bgSecondary: "#f5f5f5",
   text: "#1a1a2e",
@@ -77,13 +43,9 @@ export const lightTheme: PulseTheme = {
   spacingMd: "16px",
   spacingLg: "24px",
   radius: "4px",
-  transition: "0.2s ease",
+  transition: "0.2s ease"
 };
-
-/**
- * High contrast theme for accessibility
- */
-export const highContrastTheme: PulseTheme = {
+var highContrastTheme = {
   bg: "#000000",
   bgSecondary: "#111111",
   text: "#ffffff",
@@ -102,24 +64,14 @@ export const highContrastTheme: PulseTheme = {
   spacingMd: "16px",
   spacingLg: "24px",
   radius: "4px",
-  transition: "0.2s ease",
+  transition: "0.2s ease"
 };
-
-/**
- * All available theme presets
- */
-export const PULSE_THEMES = {
+var PULSE_THEMES = {
   dark: darkTheme,
   light: lightTheme,
-  "high-contrast": highContrastTheme,
-} as const;
-
-export type ThemePreset = keyof typeof PULSE_THEMES;
-
-/**
- * Convert a theme object to CSS variable declarations
- */
-export function themeToCSS(theme: PulseTheme): string {
+  "high-contrast": highContrastTheme
+};
+function themeToCSS(theme) {
   return `
     --pulse-bg: ${theme.bg};
     --pulse-bg-secondary: ${theme.bgSecondary};
@@ -142,123 +94,91 @@ export function themeToCSS(theme: PulseTheme): string {
     --pulse-transition: ${theme.transition};
   `;
 }
-
-/**
- * Base class for PulseCLI Web Components
- *
- * Provides common functionality for all components:
- * - Shadow DOM encapsulation
- * - Style injection
- * - Event helper methods
- */
-export abstract class PulseBaseComponent extends HTMLElement {
-  protected shadow: ShadowRoot;
-
+var PulseBaseComponent = class extends HTMLElement {
   constructor() {
     super();
+    __publicField(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" });
   }
-
   /**
    * Called when element is added to DOM
    */
-  connectedCallback(): void {
+  connectedCallback() {
     this.render();
     this.setupEventListeners();
   }
-
   /**
    * Called when element is removed from DOM
    */
-  disconnectedCallback(): void {
+  disconnectedCallback() {
     this.cleanup();
   }
-
-  /**
-   * Render the component (must be implemented by subclasses)
-   */
-  protected abstract render(): void;
-
   /**
    * Set up event listeners (override in subclasses)
    */
-  protected setupEventListeners(): void {
-    // Override in subclasses
+  setupEventListeners() {
   }
-
   /**
    * Cleanup when component is removed (override in subclasses)
    */
-  protected cleanup(): void {
-    // Override in subclasses
+  cleanup() {
   }
-
   /**
    * Create and inject a style element
    */
-  protected injectStyles(css: string): void {
+  injectStyles(css) {
     const style = document.createElement("style");
     style.textContent = css;
     this.shadow.appendChild(style);
   }
-
   /**
    * Emit a custom event
    */
-  protected emit<T>(eventName: string, detail: T): void {
+  emit(eventName, detail) {
     this.dispatchEvent(
       new CustomEvent(eventName, {
         detail,
         bubbles: true,
-        composed: true, // Allows event to cross shadow DOM boundary
+        composed: true
+        // Allows event to cross shadow DOM boundary
       })
     );
   }
-
   /**
    * Query an element within shadow DOM
    */
-  protected $(selector: string): Element | null {
+  $(selector) {
     return this.shadow.querySelector(selector);
   }
-
   /**
    * Query all elements within shadow DOM
    */
-  protected $$(selector: string): NodeListOf<Element> {
+  $$(selector) {
     return this.shadow.querySelectorAll(selector);
   }
-
   /**
    * Get attribute with default value
    */
-  protected getAttr(name: string, defaultValue: string = ""): string {
+  getAttr(name, defaultValue = "") {
     return this.getAttribute(name) ?? defaultValue;
   }
-
   /**
    * Get boolean attribute
    */
-  protected getBoolAttr(name: string): boolean {
+  getBoolAttr(name) {
     return this.hasAttribute(name);
   }
-
   /**
    * Get numeric attribute
    */
-  protected getNumAttr(name: string, defaultValue: number = 0): number {
+  getNumAttr(name, defaultValue = 0) {
     const value = this.getAttribute(name);
     if (value === null) return defaultValue;
     const num = parseFloat(value);
     return isNaN(num) ? defaultValue : num;
   }
-}
-
-/**
- * CSS custom properties (CSS variables) used by PulseCLI components
- * @deprecated Use PULSE_THEMES and themeToCSS instead
- */
-export const PULSE_CSS_VARS = {
+};
+var PULSE_CSS_VARS = {
   // Colors
   "--pulse-bg": darkTheme.bg,
   "--pulse-bg-secondary": darkTheme.bgSecondary,
@@ -270,30 +190,21 @@ export const PULSE_CSS_VARS = {
   "--pulse-success": darkTheme.success,
   "--pulse-warning": darkTheme.warning,
   "--pulse-border": darkTheme.border,
-
   // Typography
   "--pulse-font-family": darkTheme.fontFamily,
   "--pulse-font-size": darkTheme.fontSize,
   "--pulse-line-height": darkTheme.lineHeight,
-
   // Spacing
   "--pulse-spacing-xs": darkTheme.spacingXs,
   "--pulse-spacing-sm": darkTheme.spacingSm,
   "--pulse-spacing-md": darkTheme.spacingMd,
   "--pulse-spacing-lg": darkTheme.spacingLg,
-
   // Border radius
   "--pulse-radius": darkTheme.radius,
-
   // Transitions
-  "--pulse-transition": darkTheme.transition,
-} as const;
-
-/**
- * Generate base CSS with custom properties
- * @param theme - Optional theme to use (defaults to dark theme)
- */
-export function getBaseStyles(theme: PulseTheme = darkTheme): string {
+  "--pulse-transition": darkTheme.transition
+};
+function getBaseStyles(theme = darkTheme) {
   return `
     :host {
       ${themeToCSS(theme)}
@@ -304,3 +215,15 @@ export function getBaseStyles(theme: PulseTheme = darkTheme): string {
     }
   `;
 }
+
+export {
+  __publicField,
+  darkTheme,
+  lightTheme,
+  highContrastTheme,
+  PULSE_THEMES,
+  themeToCSS,
+  PulseBaseComponent,
+  PULSE_CSS_VARS,
+  getBaseStyles
+};
