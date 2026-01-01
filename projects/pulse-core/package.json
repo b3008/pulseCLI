@@ -1,0 +1,59 @@
+{
+  "name": "@b3008/pulse-cli-core",
+  "version": "0.1.0",
+  "description": "Framework-agnostic core library for PulseCLI - a terminal-style command interface",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "keywords": [
+    "cli",
+    "terminal",
+    "command-line",
+    "web-components",
+    "framework-agnostic",
+    "react",
+    "vue",
+    "angular"
+  ],
+  "author": "Nikolaos Batalas <nikolaos.batalas@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/b3008/pulseCLI.git"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "jsdom": "^27.4.0",
+    "tsup": "^8.0.0",
+    "typescript": "~5.6.0",
+    "vitest": "^2.0.0"
+  },
+  "peerDependencies": {
+    "showdown": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "showdown": {
+      "optional": true
+    }
+  }
+}

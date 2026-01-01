@@ -1,0 +1,23 @@
+# Source files
+src/
+*.test.ts
+*.spec.ts
+
+# Config files
+tsconfig.json
+vitest.config.ts
+
+# Development
+node_modules/
+.DS_Store
+
+# Build artifacts (keep dist/)
+!dist/
+
+# Documentation for development
+*.md
+!README.md
+
+# Testing
+coverage/
+.nyc_output/
