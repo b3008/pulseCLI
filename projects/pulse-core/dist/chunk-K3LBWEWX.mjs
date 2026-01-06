@@ -5,7 +5,7 @@ import {
   darkTheme,
   getBaseStyles,
   themeToCSS
-} from "./chunk-ZF76DJ4G.mjs";
+} from "./chunk-E2RYDWUH.mjs";
 
 // src/core/Option.ts
 var CommandOption = class {
@@ -718,28 +718,45 @@ var CommandRegistry = class {
   }
   /**
    * Generate help text for all commands
+   * Returns HTML with semantic classes for styling
    */
   generateHelp() {
-    const lines = ["Available Commands:", ""];
+    const parts = [
+      '<div class="pulse-help">',
+      '<h2 class="pulse-help-title">Available Commands</h2>'
+    ];
     for (const [category, commands] of this.categories.entries()) {
       if (category === "unlisted") continue;
-      lines.push(`## ${category}`);
-      lines.push("");
+      parts.push(`<section class="pulse-help-category">`);
+      parts.push(`<h3 class="pulse-help-category-name">${this.escapeHtml(category)}</h3>`);
       for (const cmd of commands) {
         const positionalArgs = cmd.positionalArgs.join(" ");
         const signature = positionalArgs ? `${cmd.name} ${positionalArgs}` : cmd.name;
-        lines.push(`  ${signature}`);
-        lines.push(`    ${cmd.description}`);
+        parts.push(`<div class="pulse-help-command">`);
+        parts.push(`<code class="pulse-help-signature">${this.escapeHtml(signature)}</code>`);
+        parts.push(`<p class="pulse-help-description">${this.escapeHtml(cmd.description)}</p>`);
         if (cmd.options.length > 0) {
-          lines.push("    Options:");
+          parts.push(`<div class="pulse-help-options">`);
+          parts.push(`<span class="pulse-help-options-label">Options:</span>`);
+          parts.push(`<ul class="pulse-help-options-list">`);
           for (const opt of cmd.options) {
-            lines.push(`      ${opt.flags}  ${opt.description}`);
+            parts.push(`<li><code>${this.escapeHtml(opt.flags)}</code> ${this.escapeHtml(opt.description)}</li>`);
           }
+          parts.push(`</ul>`);
+          parts.push(`</div>`);
         }
-        lines.push("");
+        parts.push(`</div>`);
       }
+      parts.push(`</section>`);
     }
-    return lines.join("\n");
+    parts.push("</div>");
+    return parts.join("");
+  }
+  /**
+   * Escape HTML special characters
+   */
+  escapeHtml(text) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 };
 
@@ -898,9 +915,8 @@ var _PulseTerminal = class _PulseTerminal extends PulseBaseComponent {
     const welcome = this.getAttr("welcome", "");
     const themeAttr = this.getAttr("theme", "");
     this.injectStyles(this.getStyles());
-    if (themeAttr && _PulseTerminal.getThemeByName(themeAttr)) {
-      this.setTheme(themeAttr);
-    }
+    const initialTheme = themeAttr && _PulseTerminal.getThemeByName(themeAttr) || "dark";
+    this.setTheme(initialTheme);
     const container = document.createElement("div");
     container.className = "terminal";
     container.setAttribute("part", "terminal");

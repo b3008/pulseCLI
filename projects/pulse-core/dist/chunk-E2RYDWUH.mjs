@@ -66,10 +66,32 @@ var highContrastTheme = {
   radius: "4px",
   transition: "0.2s ease"
 };
+var primalTheme = {
+  bg: "#ffffff",
+  bgSecondary: "#f8fafc",
+  text: "#1e293b",
+  textMuted: "#64748b",
+  accent: "#1f2b5b",
+  accentHover: "#2d3a6e",
+  error: "#f87171",
+  success: "#22c55e",
+  warning: "#f59e0b",
+  border: "#e2e8f0",
+  fontFamily: "'Inter', 'Segoe UI', 'Roboto', sans-serif",
+  fontSize: "14px",
+  lineHeight: "1.5",
+  spacingXs: "4px",
+  spacingSm: "8px",
+  spacingMd: "16px",
+  spacingLg: "24px",
+  radius: "8px",
+  transition: "0.15s ease"
+};
 var PULSE_THEMES = {
   dark: darkTheme,
   light: lightTheme,
-  "high-contrast": highContrastTheme
+  "high-contrast": highContrastTheme,
+  primal: primalTheme
 };
 function themeToCSS(theme) {
   return `
@@ -204,12 +226,8 @@ var PULSE_CSS_VARS = {
   // Transitions
   "--pulse-transition": darkTheme.transition
 };
-function getBaseStyles(theme = darkTheme) {
+function getBaseStyles() {
   return `
-    :host {
-      ${themeToCSS(theme)}
-    }
-
     * {
       box-sizing: border-box;
     }
@@ -221,6 +239,7 @@ export {
   darkTheme,
   lightTheme,
   highContrastTheme,
+  primalTheme,
   PULSE_THEMES,
   themeToCSS,
   PulseBaseComponent,

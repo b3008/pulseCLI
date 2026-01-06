@@ -106,12 +106,39 @@ export const highContrastTheme: PulseTheme = {
 };
 
 /**
+ * Primal theme - Clean, modern design inspired by PrimeNG
+ * Features a light background with deep navy accents
+ */
+export const primalTheme: PulseTheme = {
+  bg: "#ffffff",
+  bgSecondary: "#f8fafc",
+  text: "#1e293b",
+  textMuted: "#64748b",
+  accent: "#1f2b5b",
+  accentHover: "#2d3a6e",
+  error: "#f87171",
+  success: "#22c55e",
+  warning: "#f59e0b",
+  border: "#e2e8f0",
+  fontFamily: "'Inter', 'Segoe UI', 'Roboto', sans-serif",
+  fontSize: "14px",
+  lineHeight: "1.5",
+  spacingXs: "4px",
+  spacingSm: "8px",
+  spacingMd: "16px",
+  spacingLg: "24px",
+  radius: "8px",
+  transition: "0.15s ease",
+};
+
+/**
  * All available theme presets
  */
 export const PULSE_THEMES = {
   dark: darkTheme,
   light: lightTheme,
   "high-contrast": highContrastTheme,
+  primal: primalTheme,
 } as const;
 
 export type ThemePreset = keyof typeof PULSE_THEMES;
@@ -290,15 +317,10 @@ export const PULSE_CSS_VARS = {
 } as const;
 
 /**
- * Generate base CSS with custom properties
- * @param theme - Optional theme to use (defaults to dark theme)
+ * Generate base CSS (without theme - theme is applied separately)
  */
-export function getBaseStyles(theme: PulseTheme = darkTheme): string {
+export function getBaseStyles(): string {
   return `
-    :host {
-      ${themeToCSS(theme)}
-    }
-
     * {
       box-sizing: border-box;
     }

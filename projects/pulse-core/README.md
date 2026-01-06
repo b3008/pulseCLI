@@ -67,7 +67,48 @@ The easiest way to get started is with the built-in Web Components:
 
 ### Using with React
 
-First, add the JSX type definitions to your TypeScript config. In your `tsconfig.json`:
+#### Quick Start (Recommended)
+
+The easiest way to use PulseCLI in React is with the `PulseTerminal` component and declarative `commands` prop:
+
+```tsx
+import { PulseTerminal } from '@b3008/pulse-cli-core/react';
+
+function App() {
+  return (
+    <PulseTerminal
+      prompt="$"
+      welcome="Welcome! Type 'help' for available commands."
+      theme="dark"
+      commands={[
+        {
+          command: 'hello',
+          description: 'Say hello',
+          category: 'demo',
+          action: (args, cmd, resolve) => resolve('Hello, World!'),
+        },
+        {
+          command: 'greet <name>',
+          description: 'Greet someone by name',
+          category: 'demo',
+          options: [{ flags: '-l, --loud', description: 'Use uppercase' }],
+          action: (args, cmd, resolve) => {
+            let msg = `Hello, ${args.name}!`;
+            if (args.options.loud) msg = msg.toUpperCase();
+            resolve(msg);
+          },
+        },
+      ]}
+    />
+  );
+}
+```
+
+That's it! No refs, no `useEffect`, no event listeners needed.
+
+#### TypeScript Setup
+
+For TypeScript support, add the JSX type definitions. In your `tsconfig.json`:
 
 ```json
 {
@@ -77,56 +118,111 @@ First, add the JSX type definitions to your TypeScript config. In your `tsconfig
 }
 ```
 
-Or add a reference in a global `.d.ts` file in your project:
+Or add a triple-slash reference in a `.d.ts` file:
 
 ```typescript
 /// <reference types="@b3008/pulse-cli-core/jsx" />
 ```
 
-Then use the components:
+#### Theming
+
+Use built-in themes or create custom ones:
 
 ```tsx
-import { useEffect, useRef } from 'react';
-import '@b3008/pulse-cli-core';
+import { PulseTerminal, registerTheme } from '@b3008/pulse-cli-core/react';
 
-function Terminal() {
-  const terminalRef = useRef<HTMLElement>(null);
+// Built-in themes: 'dark', 'light', 'high-contrast'
+<PulseTerminal theme="light" commands={[...]} />
+
+// Inline custom theme (per-component)
+<PulseTerminal
+  customTheme={{
+    bg: '#1a1a2e',
+    accent: '#e94560',
+    text: '#eaeaea',
+  }}
+  commands={[...]}
+/>
+
+// Register a reusable named theme
+registerTheme('my-brand', {
+  bg: '#0a0a0a',
+  accent: '#ff6b6b',
+  text: '#ffffff',
+  fontFamily: '"Fira Code", monospace',
+});
+
+<PulseTerminal theme="my-brand" commands={[...]} />
+```
+
+See the [Theming Guide](docs/theming-guide.md) for all available theme properties.
+
+#### Advanced: Context Hook
+
+For commands in child components, use the `usePulseRegistry` hook:
+
+```tsx
+import { PulseTerminal, usePulseRegistry } from '@b3008/pulse-cli-core/react';
+import { useEffect } from 'react';
+
+function MyCommands() {
+  const registry = usePulseRegistry();
 
   useEffect(() => {
-    const terminal = terminalRef.current as any;
-    if (!terminal) return;
+    if (!registry) return;
 
-    const handleReady = (event: CustomEvent) => {
-      const { registry } = event.detail;
+    const cmd = registry.addCommand('fetch-data', 'Fetch remote data', 'api')
+      .action(async (args, cmd, resolve, reject) => {
+        try {
+          const data = await fetch('/api/data').then(r => r.json());
+          resolve(JSON.stringify(data, null, 2));
+        } catch (e) {
+          reject(e);
+        }
+      });
 
-      registry.addCommand('hello <name>', 'Say hello', 'demo')
-        .action((args, cmd, resolve) => {
-          resolve(`Hello, ${args.name}!`);
-        });
-    };
+    return () => registry.removeCommand('fetch-data');
+  }, [registry]);
 
-    terminal.addEventListener('pulse-ready', handleReady);
-    return () => terminal.removeEventListener('pulse-ready', handleReady);
-  }, []);
+  return null;
+}
 
+function App() {
   return (
-    <pulse-terminal
-      ref={terminalRef}
-      prompt=">"
-      welcome="Type 'help' to see available commands"
-    />
+    <PulseTerminal prompt="$" commands={[...]}>
+      <MyCommands />
+    </PulseTerminal>
   );
+}
+```
+
+#### Advanced: Direct Hook Usage
+
+For full control, use the `usePulseTerminal` hook:
+
+```tsx
+import { usePulseTerminal } from '@b3008/pulse-cli-core/react';
+import '@b3008/pulse-cli-core'; // Import web components
+
+function Terminal() {
+  const { terminalRef, registry, isReady } = usePulseTerminal({
+    onReady: (registry) => {
+      registry.addCommand('hello', 'Say hello', 'demo')
+        .action((args, cmd, resolve) => resolve('Hello!'));
+    }
+  });
+
+  return <pulse-terminal ref={terminalRef} prompt=">" />;
 }
 ```
 
 #### Rendering React Components in Output
 
-Use `createOutputMount()` to get a mount point for rendering React components:
+Use `createOutputMount()` to render React components in command output:
 
 ```tsx
 import { createRoot } from 'react-dom/client';
 
-// Define a component
 function DataTable({ data }: { data: Array<{ name: string; value: string }> }) {
   return (
     <table style={{ width: '100%' }}>
@@ -142,29 +238,19 @@ function DataTable({ data }: { data: Array<{ name: string; value: string }> }) {
   );
 }
 
-// Inside your command action:
-registry.addCommand('stats', 'Show system stats', 'demo')
-  .action((args, cmd, resolve) => {
-    // Get a mount point for React
-    const mountPoint = terminal.createOutputMount(cmd);
-
-    // Render your React component
-    const root = createRoot(mountPoint);
-    root.render(
-      <DataTable data={[
-        { name: 'CPU', value: '45%' },
-        { name: 'Memory', value: '2.1 GB' },
-      ]} />
-    );
-
-    resolve(null);
-  });
+// In your command action:
+action: (args, cmd, resolve) => {
+  const mountPoint = terminal.createOutputMount(cmd);
+  const root = createRoot(mountPoint);
+  root.render(
+    <DataTable data={[
+      { name: 'CPU', value: '45%' },
+      { name: 'Memory', value: '2.1 GB' },
+    ]} />
+  );
+  resolve(null);
+}
 ```
-
-Key points:
-- `terminal.createOutputMount(command)` creates an output card and returns the mount point
-- Use `createRoot()` from React 18+ to render JSX into the mount point
-- Call `root.unmount()` for cleanup when the output is removed (optional)
 
 ### Headless Usage (No UI)
 
@@ -288,6 +374,7 @@ Main terminal component that combines input and output.
 - `prompt` - Prompt symbol (default: `>`)
 - `welcome` - Welcome message to display
 - `max-outputs` - Maximum number of output cards to keep (default: 50)
+- `theme` - Theme name: `dark`, `light`, `high-contrast`, or custom registered
 
 **Properties:**
 - `registry` - CommandRegistry instance
@@ -296,7 +383,13 @@ Main terminal component that combines input and output.
 - `execute(command: string)` - Execute a command programmatically
 - `addOutput(content: string, command?: string)` - Add output card
 - `clearOutputs()` - Clear all output
+- `setTheme(name: string)` - Change theme at runtime
 - `focus()` - Focus the command input
+
+**Static Methods:**
+- `PulseTerminal.registerTheme(name, theme)` - Register a custom theme
+- `PulseTerminal.unregisterTheme(name)` - Remove a custom theme
+- `PulseTerminal.getThemeNames()` - Get all available theme names
 
 **Events:**
 - `pulse-ready` - Emitted when terminal is initialized

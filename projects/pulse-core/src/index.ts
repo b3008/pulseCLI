@@ -72,6 +72,7 @@ export {
   darkTheme,
   lightTheme,
   highContrastTheme,
+  primalTheme,
   PULSE_THEMES,
   themeToCSS,
 } from './components/BaseComponent';

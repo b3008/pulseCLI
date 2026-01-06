@@ -5,13 +5,13 @@ import {
   CommandRegistry,
   PulseCommand,
   PulseTerminal
-} from "./chunk-4UN3EZOE.mjs";
+} from "./chunk-K3LBWEWX.mjs";
 import {
   PulseCommandLine
-} from "./chunk-44FZ76F7.mjs";
+} from "./chunk-25L2WE4L.mjs";
 import {
   PulseCommandOutput
-} from "./chunk-7EW2XGVE.mjs";
+} from "./chunk-6MO5RI4U.mjs";
 import {
   PULSE_CSS_VARS,
   PULSE_THEMES,
@@ -21,8 +21,9 @@ import {
   getBaseStyles,
   highContrastTheme,
   lightTheme,
+  primalTheme,
   themeToCSS
-} from "./chunk-ZF76DJ4G.mjs";
+} from "./chunk-E2RYDWUH.mjs";
 
 // src/storage/StorageAdapters.ts
 var MemoryStorageAdapter = class {
@@ -197,9 +198,9 @@ function deepClone(obj) {
 // src/index.ts
 var VERSION = "0.1.0";
 function defineElements() {
-  import("./CommandLine-JE445Z25.mjs");
-  import("./CommandOutput-SWOK5AIT.mjs");
-  import("./PulseTerminal-TQV2GJ2L.mjs");
+  import("./CommandLine-ODF4KSE7.mjs");
+  import("./CommandOutput-2FFFK76N.mjs");
+  import("./PulseTerminal-KS62EXNH.mjs");
 }
 export {
   CommandHistory,
@@ -230,6 +231,7 @@ export {
   isBrowser,
   kebabToCamel,
   lightTheme,
+  primalTheme,
   supportsCustomElements,
   themeToCSS,
   throttle,

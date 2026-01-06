@@ -2,7 +2,7 @@ import {
   PulseBaseComponent,
   __publicField,
   getBaseStyles
-} from "./chunk-ZF76DJ4G.mjs";
+} from "./chunk-E2RYDWUH.mjs";
 
 // src/components/CommandOutput.ts
 var _PulseCommandOutput = class _PulseCommandOutput extends PulseBaseComponent {
@@ -241,6 +241,76 @@ var _PulseCommandOutput = class _PulseCommandOutput extends PulseBaseComponent {
 
       .content::-webkit-scrollbar-thumb:hover {
         background: var(--pulse-text-muted);
+      }
+
+      /* Help output styling */
+      .content .pulse-help {
+        font-family: var(--pulse-font-family);
+      }
+
+      .content .pulse-help-title {
+        margin: 0 0 var(--pulse-spacing-md) 0;
+        font-size: 1.1em;
+        color: var(--pulse-accent);
+        font-weight: 600;
+      }
+
+      .content .pulse-help-category {
+        margin-bottom: var(--pulse-spacing-md);
+      }
+
+      .content .pulse-help-category-name {
+        margin: 0 0 var(--pulse-spacing-sm) 0;
+        font-size: 0.95em;
+        color: var(--pulse-text);
+        font-weight: 500;
+        text-transform: capitalize;
+        border-bottom: 1px solid var(--pulse-border);
+        padding-bottom: var(--pulse-spacing-xs);
+      }
+
+      .content .pulse-help-command {
+        margin-bottom: var(--pulse-spacing-sm);
+        padding-left: var(--pulse-spacing-sm);
+      }
+
+      .content .pulse-help-signature {
+        color: var(--pulse-success);
+        font-weight: 500;
+        font-size: 0.95em;
+      }
+
+      .content .pulse-help-description {
+        margin: var(--pulse-spacing-xs) 0 0 0;
+        color: var(--pulse-text-muted);
+        font-size: 0.9em;
+      }
+
+      .content .pulse-help-options {
+        margin-top: var(--pulse-spacing-xs);
+        padding-left: var(--pulse-spacing-sm);
+      }
+
+      .content .pulse-help-options-label {
+        color: var(--pulse-text-muted);
+        font-size: 0.85em;
+        font-style: italic;
+      }
+
+      .content .pulse-help-options-list {
+        margin: var(--pulse-spacing-xs) 0 0 0;
+        padding-left: var(--pulse-spacing-md);
+        list-style: none;
+      }
+
+      .content .pulse-help-options-list li {
+        margin-bottom: 2px;
+        font-size: 0.85em;
+      }
+
+      .content .pulse-help-options-list code {
+        color: var(--pulse-warning);
+        margin-right: var(--pulse-spacing-xs);
       }
     `;
   }

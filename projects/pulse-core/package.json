@@ -1,6 +1,6 @@
 {
   "name": "@b3008/pulse-cli-core",
-  "version": "0.1.0",
+  "version": "0.1.7",
   "description": "Framework-agnostic core library for PulseCLI - a terminal-style command interface",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -13,6 +13,11 @@
     },
     "./jsx": {
       "types": "./jsx.d.ts"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.mjs",
+      "require": "./dist/react/index.js"
     }
   },
   "files": [
@@ -20,8 +25,8 @@
     "jsx.d.ts"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup src/index.ts src/react/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts src/react/index.ts --format cjs,esm --dts --watch",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -47,15 +52,20 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@types/react": "^18.0.0",
     "jsdom": "^27.4.0",
     "tsup": "^8.0.0",
     "typescript": "~5.6.0",
     "vitest": "^2.0.0"
   },
   "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
     "showdown": "^2.0.0"
   },
   "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
     "showdown": {
       "optional": true
     }

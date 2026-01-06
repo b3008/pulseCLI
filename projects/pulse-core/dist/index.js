@@ -765,28 +765,45 @@ var init_CommandRegistry = __esm({
       }
       /**
        * Generate help text for all commands
+       * Returns HTML with semantic classes for styling
        */
       generateHelp() {
-        const lines = ["Available Commands:", ""];
+        const parts = [
+          '<div class="pulse-help">',
+          '<h2 class="pulse-help-title">Available Commands</h2>'
+        ];
         for (const [category, commands] of this.categories.entries()) {
           if (category === "unlisted") continue;
-          lines.push(`## ${category}`);
-          lines.push("");
+          parts.push(`<section class="pulse-help-category">`);
+          parts.push(`<h3 class="pulse-help-category-name">${this.escapeHtml(category)}</h3>`);
           for (const cmd of commands) {
             const positionalArgs = cmd.positionalArgs.join(" ");
             const signature = positionalArgs ? `${cmd.name} ${positionalArgs}` : cmd.name;
-            lines.push(`  ${signature}`);
-            lines.push(`    ${cmd.description}`);
+            parts.push(`<div class="pulse-help-command">`);
+            parts.push(`<code class="pulse-help-signature">${this.escapeHtml(signature)}</code>`);
+            parts.push(`<p class="pulse-help-description">${this.escapeHtml(cmd.description)}</p>`);
             if (cmd.options.length > 0) {
-              lines.push("    Options:");
+              parts.push(`<div class="pulse-help-options">`);
+              parts.push(`<span class="pulse-help-options-label">Options:</span>`);
+              parts.push(`<ul class="pulse-help-options-list">`);
               for (const opt of cmd.options) {
-                lines.push(`      ${opt.flags}  ${opt.description}`);
+                parts.push(`<li><code>${this.escapeHtml(opt.flags)}</code> ${this.escapeHtml(opt.description)}</li>`);
               }
+              parts.push(`</ul>`);
+              parts.push(`</div>`);
             }
-            lines.push("");
+            parts.push(`</div>`);
           }
+          parts.push(`</section>`);
         }
-        return lines.join("\n");
+        parts.push("</div>");
+        return parts.join("");
+      }
+      /**
+       * Escape HTML special characters
+       */
+      escapeHtml(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
       }
     };
   }
@@ -816,18 +833,14 @@ function themeToCSS(theme) {
     --pulse-transition: ${theme.transition};
   `;
 }
-function getBaseStyles(theme = darkTheme) {
+function getBaseStyles() {
   return `
-    :host {
-      ${themeToCSS(theme)}
-    }
-
     * {
       box-sizing: border-box;
     }
   `;
 }
-var darkTheme, lightTheme, highContrastTheme, PULSE_THEMES, PulseBaseComponent, PULSE_CSS_VARS;
+var darkTheme, lightTheme, highContrastTheme, primalTheme, PULSE_THEMES, PulseBaseComponent, PULSE_CSS_VARS;
 var init_BaseComponent = __esm({
   "src/components/BaseComponent.ts"() {
     "use strict";
@@ -894,10 +907,32 @@ var init_BaseComponent = __esm({
       radius: "4px",
       transition: "0.2s ease"
     };
+    primalTheme = {
+      bg: "#ffffff",
+      bgSecondary: "#f8fafc",
+      text: "#1e293b",
+      textMuted: "#64748b",
+      accent: "#1f2b5b",
+      accentHover: "#2d3a6e",
+      error: "#f87171",
+      success: "#22c55e",
+      warning: "#f59e0b",
+      border: "#e2e8f0",
+      fontFamily: "'Inter', 'Segoe UI', 'Roboto', sans-serif",
+      fontSize: "14px",
+      lineHeight: "1.5",
+      spacingXs: "4px",
+      spacingSm: "8px",
+      spacingMd: "16px",
+      spacingLg: "24px",
+      radius: "8px",
+      transition: "0.15s ease"
+    };
     PULSE_THEMES = {
       dark: darkTheme,
       light: lightTheme,
-      "high-contrast": highContrastTheme
+      "high-contrast": highContrastTheme,
+      primal: primalTheme
     };
     PulseBaseComponent = class extends HTMLElement {
       constructor() {
@@ -1481,6 +1516,76 @@ var init_CommandOutput = __esm({
       .content::-webkit-scrollbar-thumb:hover {
         background: var(--pulse-text-muted);
       }
+
+      /* Help output styling */
+      .content .pulse-help {
+        font-family: var(--pulse-font-family);
+      }
+
+      .content .pulse-help-title {
+        margin: 0 0 var(--pulse-spacing-md) 0;
+        font-size: 1.1em;
+        color: var(--pulse-accent);
+        font-weight: 600;
+      }
+
+      .content .pulse-help-category {
+        margin-bottom: var(--pulse-spacing-md);
+      }
+
+      .content .pulse-help-category-name {
+        margin: 0 0 var(--pulse-spacing-sm) 0;
+        font-size: 0.95em;
+        color: var(--pulse-text);
+        font-weight: 500;
+        text-transform: capitalize;
+        border-bottom: 1px solid var(--pulse-border);
+        padding-bottom: var(--pulse-spacing-xs);
+      }
+
+      .content .pulse-help-command {
+        margin-bottom: var(--pulse-spacing-sm);
+        padding-left: var(--pulse-spacing-sm);
+      }
+
+      .content .pulse-help-signature {
+        color: var(--pulse-success);
+        font-weight: 500;
+        font-size: 0.95em;
+      }
+
+      .content .pulse-help-description {
+        margin: var(--pulse-spacing-xs) 0 0 0;
+        color: var(--pulse-text-muted);
+        font-size: 0.9em;
+      }
+
+      .content .pulse-help-options {
+        margin-top: var(--pulse-spacing-xs);
+        padding-left: var(--pulse-spacing-sm);
+      }
+
+      .content .pulse-help-options-label {
+        color: var(--pulse-text-muted);
+        font-size: 0.85em;
+        font-style: italic;
+      }
+
+      .content .pulse-help-options-list {
+        margin: var(--pulse-spacing-xs) 0 0 0;
+        padding-left: var(--pulse-spacing-md);
+        list-style: none;
+      }
+
+      .content .pulse-help-options-list li {
+        margin-bottom: 2px;
+        font-size: 0.85em;
+      }
+
+      .content .pulse-help-options-list code {
+        color: var(--pulse-warning);
+        margin-right: var(--pulse-spacing-xs);
+      }
     `;
       }
     };
@@ -1659,9 +1764,8 @@ var init_PulseTerminal = __esm({
         const welcome = this.getAttr("welcome", "");
         const themeAttr = this.getAttr("theme", "");
         this.injectStyles(this.getStyles());
-        if (themeAttr && _PulseTerminal.getThemeByName(themeAttr)) {
-          this.setTheme(themeAttr);
-        }
+        const initialTheme = themeAttr && _PulseTerminal.getThemeByName(themeAttr) || "dark";
+        this.setTheme(initialTheme);
         const container = document.createElement("div");
         container.className = "terminal";
         container.setAttribute("part", "terminal");
@@ -1879,6 +1983,7 @@ __export(index_exports, {
   isBrowser: () => isBrowser,
   kebabToCamel: () => kebabToCamel,
   lightTheme: () => lightTheme,
+  primalTheme: () => primalTheme,
   supportsCustomElements: () => supportsCustomElements,
   themeToCSS: () => themeToCSS,
   throttle: () => throttle,
@@ -2105,6 +2210,7 @@ function defineElements() {
   isBrowser,
   kebabToCamel,
   lightTheme,
+  primalTheme,
   supportsCustomElements,
   themeToCSS,
   throttle,

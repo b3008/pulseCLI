@@ -245,10 +245,9 @@ export class PulseTerminal extends PulseBaseComponent {
 
     this.injectStyles(this.getStyles());
 
-    // Apply initial theme if specified
-    if (themeAttr && PulseTerminal.getThemeByName(themeAttr)) {
-      this.setTheme(themeAttr);
-    }
+    // Always apply a theme (specified or default dark)
+    const initialTheme = (themeAttr && PulseTerminal.getThemeByName(themeAttr)) || 'dark';
+    this.setTheme(initialTheme);
 
     const container = document.createElement('div');
     container.className = 'terminal';
